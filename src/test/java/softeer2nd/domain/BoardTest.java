@@ -14,19 +14,9 @@ public class BoardTest {
     }
 
     @Test
-    public void createBoardWithWhitePawn() throws Exception {
-        verifyBoard(ChessColor.WHITE);
-    }
-
-    @Test
-    public void createBoardWithBlackPawn() throws Exception {
-        verifyBoard(ChessColor.BLACK);
-    }
-
-    void verifyBoard(ChessColor color) {
-        Pawn pawn = new Pawn(color);
-        board.add(pawn);
-        assertEquals(1, board.size());
-        assertEquals(pawn, board.findPawn(0));
+    void initialize() throws Exception {
+        board.initialize();
+        assertEquals("pppppppp", board.getWhitePawnsResult());
+        assertEquals("PPPPPPPP", board.getBlackPawnsResult());
     }
 }
