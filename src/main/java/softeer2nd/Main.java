@@ -1,7 +1,11 @@
 package softeer2nd;
 
+import softeer2nd.controller.GameController;
+import softeer2nd.domain.Board;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Board board = new Board();
+        new GameController(board).start();
     }
 }
