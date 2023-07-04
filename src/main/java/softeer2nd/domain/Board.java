@@ -28,6 +28,9 @@ public class Board {
     }
 
     public void print() {
+        for(char[] row : pieces){
+            System.out.println(new String(row));
+        }
     }
 
     public String getWhitePawnsResult() {
