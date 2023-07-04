@@ -1,22 +1,32 @@
 package softeer2nd.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardTest {
+
+    private Board board;
+    @BeforeEach
+    void init() {
+        board = new Board();
+    }
+
     @Test
-    public void createBoard() throws Exception {
-        Board board = new Board();
+    public void createBoardWithWhitePawn() throws Exception {
+        verifyBoard(ChessColor.WHITE);
+    }
 
-        Pawn white = new Pawn(ChessColor.WHITE);
-        board.add(white);
+    @Test
+    public void createBoardWithBlackPawn() throws Exception {
+        verifyBoard(ChessColor.BLACK);
+    }
+
+    void verifyBoard(ChessColor color) {
+        Pawn pawn = new Pawn(color);
+        board.add(pawn);
         assertEquals(1, board.size());
-        assertEquals(white, board.findPawn(0));
-
-        Pawn black = new Pawn(ChessColor.BLACK);
-        board.add(black);
-        assertEquals(2, board.size());
-        assertEquals(black, board.findPawn(1));
+        assertEquals(pawn, board.findPawn(0));
     }
 }
