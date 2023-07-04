@@ -9,6 +9,7 @@ public class BoardTest {
 
     private Board board;
     private String REPRESENTATION_PAWN = "pppppppp";
+
     @BeforeEach
     void init() {
         board = new Board();
