@@ -1,13 +1,13 @@
-package softeer2nd.domain;
+package softeer2nd.domain.VO;
 
-public enum ChessColor {
+public enum Color {
     WHITE('p'),
     BLACK('P'),
     ;
 
     private final char representation;
 
-    ChessColor(char p) {
+    Color(char p) {
         this.representation = p;
     }
 
