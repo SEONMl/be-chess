@@ -71,4 +71,7 @@ public class Piece {
     public Type getType() {
         return type;
     }
+
+    public boolean isWhite() {return this.color.isWhite();}
+    public boolean isBlack() {return this.color.isBlack();}
 }
