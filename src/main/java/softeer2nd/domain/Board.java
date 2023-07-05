@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static softeer2nd.utils.StringUtils.NEWLINE;
+
 public class Board {
 
     static final int MAX_SIZE = 8;
@@ -27,6 +29,7 @@ public class Board {
 
         pieces.add(initRow(Type.KING, Color.BLACK));
         pieces.add(initRow(Type.PAWN, Color.BLACK));
+        pieces.add(initRow(Type.BLANK, Color.NONE));
         pieces.add(initRow(Type.BLANK, Color.NONE));
         pieces.add(initRow(Type.BLANK, Color.NONE));
         pieces.add(initRow(Type.BLANK, Color.NONE));
@@ -82,11 +85,12 @@ public class Board {
         return list.stream()
                 .map(p -> {
                     char c = p.getType().getRepresentation();
-                    if (p.getColor() == Color.BLACK) Character.toUpperCase(c);
+                    if (p.isBlack()) c = Character.toUpperCase(c);
                     return c;
                 })
                 .map(String::valueOf)
-                .collect(Collectors.joining());
+                .collect(Collectors.joining())
+                .concat(NEWLINE);
     }
 
     public int pieceCount() {
