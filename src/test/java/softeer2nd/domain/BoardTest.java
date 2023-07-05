@@ -8,25 +8,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BoardTest {
 
     private Board board;
+    private String REPRESENTATION_PAWN = "pppppppp";
     @BeforeEach
     void init() {
         board = new Board();
+        board.initialize();
     }
 
     @Test
-    public void createBoardWithWhitePawn() throws Exception {
-        verifyBoard(ChessColor.WHITE);
-    }
-
-    @Test
-    public void createBoardWithBlackPawn() throws Exception {
-        verifyBoard(ChessColor.BLACK);
-    }
-
-    void verifyBoard(ChessColor color) {
-        Pawn pawn = new Pawn(color);
-        board.add(pawn);
-        assertEquals(1, board.size());
-        assertEquals(pawn, board.findPawn(0));
+    void initialize() throws Exception {
+        assertEquals(REPRESENTATION_PAWN, board.getWhitePawnsResult());
+        assertEquals(REPRESENTATION_PAWN.toUpperCase(), board.getBlackPawnsResult());
     }
 }
