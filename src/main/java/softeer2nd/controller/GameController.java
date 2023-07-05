@@ -17,7 +17,7 @@ public class GameController {
 
     public void start() {
         chessBoard.initialize();
-        chessBoard.print();
+        chessBoard.show();
         run();
     }
 

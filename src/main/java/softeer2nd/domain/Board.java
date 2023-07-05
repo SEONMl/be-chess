@@ -1,5 +1,8 @@
 package softeer2nd.domain;
 
+import softeer2nd.domain.VO.Color;
+import softeer2nd.domain.VO.Type;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,47 +10,86 @@ import java.util.stream.Collectors;
 
 public class Board {
 
-    private final int MAX_SIZE = 8;
-    List<List<Character>> pieces;
+    static final int MAX_SIZE = 8;
+    static final int INITIAL_PIECE_COUNT = 32;
+    private final int WHITE_PIECE_LINE = 6;
+    private final int BLACK_PIECE_LINE = 1;
+    private int pieceCount;
+    List<List<Piece>> pieces;
 
     public Board() {
-        pieces = new ArrayList<>();
-        for (int i = 0; i < MAX_SIZE; i++) {
-            pieces.add(new ArrayList<>());
-        }
+        initialize();
     }
 
     public void initialize() {
-        char[] tmp = {'.', 'p', 'P'};
-        char c = tmp[0];
+        pieceCount = INITIAL_PIECE_COUNT;
+        pieces = new ArrayList<>();
 
-        for (int i = 0; i < MAX_SIZE; i++) {
-            if (i == 1) c = tmp[2];
-            else if (i == 6) c = tmp[1];
+        pieces.add(initRow(Type.KING, Color.BLACK));
+        pieces.add(initRow(Type.PAWN, Color.BLACK));
+        pieces.add(initRow(Type.BLANK, Color.NONE));
+        pieces.add(initRow(Type.BLANK, Color.NONE));
+        pieces.add(initRow(Type.BLANK, Color.NONE));
+        pieces.add(initRow(Type.PAWN, Color.WHITE));
+        pieces.add(initRow(Type.KING, Color.WHITE));
 
-            for (int j = 0; j < MAX_SIZE; j++) {
-                pieces.get(i).add(j, c);
-            }
-        }
     }
 
-    public void print() {
-        for (List<Character> row : pieces) {
-            System.out.println(concat(row));
+    private List<Piece> initRow(Type type, Color color) {
+        if (!type.isBlank() && !type.isPawn()) return initPiecesArray(color);
+
+        List<Piece> result = new ArrayList<>();
+        for (int i = 0; i < MAX_SIZE; i++) {
+            result.add(Piece.createPiece(type, color));
         }
+        return result;
+    }
+
+    private List<Piece> initPiecesArray(Color color) {
+        List<Piece> result = Arrays.asList(
+                Piece.createPiece(Type.ROOK, color),
+                Piece.createPiece(Type.KNIGHT, color),
+                Piece.createPiece(Type.BISHOP, color),
+                Piece.createPiece(Type.QUEEN, color),
+
+                Piece.createPiece(Type.KING, color),
+                Piece.createPiece(Type.BISHOP, color),
+                Piece.createPiece(Type.KNIGHT, color),
+                Piece.createPiece(Type.ROOK, color)
+        );
+        return new ArrayList<>(result);
+    }
+
+    public String show() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (List<Piece> row : pieces) {
+            stringBuilder.append(concat(row));
+        }
+
+        return stringBuilder.toString();
     }
 
     public String getWhitePawnsResult() {
-        return concat(pieces.get(6));
+        return concat(pieces.get(WHITE_PIECE_LINE));
     }
 
     public String getBlackPawnsResult() {
-        return concat(pieces.get(1));
+        return concat(pieces.get(BLACK_PIECE_LINE));
     }
 
-    private String concat(List<Character> list) {
+    private String concat(List<Piece> list) {
         return list.stream()
+                .map(p -> {
+                    char c = p.getType().getRepresentation();
+                    if (p.getColor() == Color.BLACK) Character.toUpperCase(c);
+                    return c;
+                })
                 .map(String::valueOf)
                 .collect(Collectors.joining());
+    }
+
+    public int pieceCount() {
+        return pieceCount;
     }
 }

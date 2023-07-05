@@ -23,6 +23,7 @@ public class Piece {
     public static Piece createBlackPawn() {
         return createPiece(Type.PAWN, Color.BLACK);
     }
+
     public static Piece createWhiteBishop() {
         return createPiece(Type.BISHOP, Color.WHITE);
     }
@@ -30,6 +31,7 @@ public class Piece {
     public static Piece createBlackBishop() {
         return createPiece(Type.BISHOP, Color.BLACK);
     }
+
     public static Piece createWhiteRook() {
         return createPiece(Type.ROOK, Color.WHITE);
     }
@@ -37,6 +39,7 @@ public class Piece {
     public static Piece createBlackRook() {
         return createPiece(Type.ROOK, Color.BLACK);
     }
+
     public static Piece createWhiteKnight() {
         return createPiece(Type.KNIGHT, Color.WHITE);
     }
@@ -44,6 +47,7 @@ public class Piece {
     public static Piece createBlackKnight() {
         return createPiece(Type.KNIGHT, Color.BLACK);
     }
+
     public static Piece createWhiteKing() {
         return createPiece(Type.KING, Color.WHITE);
     }
