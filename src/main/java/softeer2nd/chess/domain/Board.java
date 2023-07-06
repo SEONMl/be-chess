@@ -29,14 +29,14 @@ public class Board {
         pieceCount = INITIAL_PIECE_COUNT;
         ranks = new ArrayList<>(
                 Arrays.asList(
-                        Rank.initDifferentPieceArray(Color.BLACK),
-                        Rank.initPawnArray(Color.BLACK),
-                        Rank.initBlankArray(),
-                        Rank.initBlankArray(),
-                        Rank.initBlankArray(),
-                        Rank.initBlankArray(),
-                        Rank.initPawnArray(Color.WHITE),
-                        Rank.initDifferentPieceArray(Color.WHITE)
+                        Rank.createDifferentPieceArray(Color.BLACK),
+                        Rank.createPawnArray(Color.BLACK),
+                        Rank.createBlankArray(),
+                        Rank.createBlankArray(),
+                        Rank.createBlankArray(),
+                        Rank.createBlankArray(),
+                        Rank.createPawnArray(Color.WHITE),
+                        Rank.createDifferentPieceArray(Color.WHITE)
                 )
         );
     }
@@ -44,7 +44,7 @@ public class Board {
     public void initializeEmpty() {
         ranks = new ArrayList<>();
         for (int i = 0; i < MAX_SIZE; i++) {
-            ranks.add(Rank.initBlankArray());
+            ranks.add(Rank.createBlankArray());
         }
     }
 

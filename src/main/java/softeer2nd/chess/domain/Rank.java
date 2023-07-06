@@ -19,15 +19,15 @@ public class Rank {
         return new Rank(pieces);
     }
 
-    public static Rank initPawnArray(Color color) {
-        return new Rank(initSamePiecesArray(Type.PAWN, color));
+    public static Rank createPawnArray(Color color) {
+        return new Rank(createSamePiecesArray(Type.PAWN, color));
     }
 
-    public static Rank initBlankArray() {
-        return new Rank(initSamePiecesArray(Type.BLANK, Color.NONE));
+    public static Rank createBlankArray() {
+        return new Rank(createSamePiecesArray(Type.BLANK, Color.NONE));
     }
 
-    public static Rank initDifferentPieceArray(Color color) {
+    public static Rank createDifferentPieceArray(Color color) {
         List<Piece> result = Arrays.asList(
                 Piece.createPiece(Type.ROOK, color),
                 Piece.createPiece(Type.KNIGHT, color),
@@ -42,7 +42,7 @@ public class Rank {
         return new Rank(new ArrayList<>(result));
     }
 
-    private static List<Piece> initSamePiecesArray(Type type, Color color) {
+    private static List<Piece> createSamePiecesArray(Type type, Color color) {
         List<Piece> pieces = new ArrayList<>();
         for (int i = 0; i < Board.MAX_SIZE; i++) {
             pieces.add(Piece.createPiece(type, color));
