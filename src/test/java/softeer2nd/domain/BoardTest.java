@@ -5,8 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static softeer2nd.domain.Board.INITIAL_PIECE_COUNT;
-import static softeer2nd.utils.StringUtils.appendNewLine;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTest {
 
@@ -21,20 +20,14 @@ public class BoardTest {
     }
 
     @Test
-    @DisplayName("보드 생성 후 초기화가 잘 되어 있는지?")
-    void initializePieces() throws Exception {
+    @DisplayName("보드 위에서 기물 찾기")
+    void findPiece() throws Exception {
         board.initialize();
 
-        assertEquals(INITIAL_PIECE_COUNT, board.pieceCount());
-        String blankRank = appendNewLine(REPRESENTATION_BLACK);
-
-        assertEquals(
-                appendNewLine(REPRESENTATION_PIECES.toUpperCase()) +
-                        appendNewLine(REPRESENTATION_PAWN).toUpperCase() +
-                        blankRank + blankRank + blankRank + blankRank +
-                        appendNewLine(REPRESENTATION_PAWN) +
-                        appendNewLine(REPRESENTATION_PIECES),
-                board.show()
-        );
+        assertEquals(Piece.createBlackRook(), board.findPiece("a8"));
+        assertEquals(Piece.createBlackRook(), board.findPiece("h8"));
+        assertEquals(Piece.createWhiteRook(), board.findPiece("a1"));
+        assertEquals(Piece.createWhiteRook(), board.findPiece("h1"));
     }
+
 }
