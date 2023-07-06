@@ -2,9 +2,11 @@ package softeer2nd.domain;
 
 import softeer2nd.domain.VO.Position;
 import softeer2nd.domain.enums.Color;
+import softeer2nd.domain.enums.Type;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -96,6 +98,32 @@ public class Board {
 
     public Piece findPiece(String expression) {
         Position position = Position.transfer(expression);
-        return ranks.get(position.getRow()).find(position.getCol());
+        Rank target = ranks.get(position.getRow());
+        return target.find(position.getCol());
+    }
+
+    public double calculatePoint(Color color) {
+        double totalPoint = ranks.stream()
+                .mapToDouble(rank -> rank.calculatePoint(color))
+                .sum();
+
+        // Pawn 만 따로 계산 : 점수 - 개수*0.5
+        int countOfPawns[] = new int[MAX_SIZE];
+        for (int i = 0; i < MAX_SIZE; i++) {
+            for (int j = 0; j < MAX_SIZE; j++) {
+                Piece target = ranks.get(i).find(j);
+                if(target.equalsTypeAndColor(Type.PAWN, color)){
+                    countOfPawns[j] ++;
+                }
+            }
+        }
+
+        for(int i=0;i<MAX_SIZE;i++){
+            if(countOfPawns[i]>1) {
+                totalPoint-= countOfPawns[i]*0.5;
+            }
+        }
+
+        return totalPoint;
     }
 }

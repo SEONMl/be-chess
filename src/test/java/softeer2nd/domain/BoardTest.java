@@ -3,6 +3,7 @@ package softeer2nd.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import softeer2nd.domain.enums.Color;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,6 +41,33 @@ public class BoardTest {
 
         assertEquals(piece, board.findPiece(position));
         System.out.println(board.show());
+    }
+
+    @Test
+    @DisplayName("체스판의 기물 점수 구하는가?")
+    void calculatePoint() throws Exception {
+        board.initializeEmpty();
+
+        addPiece("b6", Piece.createBlackPawn());
+        addPiece("e6", Piece.createBlackQueen());
+        addPiece("b8", Piece.createBlackKing());
+        addPiece("c8", Piece.createBlackRook());
+
+        addPiece("f2", Piece.createWhitePawn());
+        addPiece("g2", Piece.createWhitePawn());
+        addPiece("e1", Piece.createWhiteRook());
+        addPiece("f1", Piece.createWhiteKing());
+        addPiece("h1", Piece.createWhitePawn());
+        addPiece("h2", Piece.createWhitePawn());
+
+        assertEquals(15.0, board.calculatePoint(Color.BLACK), 0.01);
+        assertEquals(8.0, board.calculatePoint(Color.WHITE), 0.01);
+
+        System.out.println(board.show());
+    }
+
+    private void addPiece(String position, Piece piece) {
+        board.move(position, piece);
     }
 
 }

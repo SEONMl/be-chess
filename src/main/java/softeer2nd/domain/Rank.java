@@ -76,4 +76,12 @@ public class Rank {
     public void add(int index, Piece piece) {
         this.pieces.set(index, piece);
     }
+
+    public double calculatePoint(Color color) {
+        return pieces.stream()
+                .filter(p -> p.getColor() == color)
+                .map(Piece::getType)
+                .mapToDouble(Type::getScore)
+                .sum();
+    }
 }
