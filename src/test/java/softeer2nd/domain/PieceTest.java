@@ -7,6 +7,7 @@ import softeer2nd.domain.VO.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class PieceTest {
 
@@ -43,5 +44,16 @@ public class PieceTest {
     void verifyPiece(Piece piece, Type type, Color color) {
         assertEquals(color, piece.getColor());
         assertEquals(type, piece.getType());
+    }
+
+    @Test
+    @DisplayName("Blank 기물이 잘 생성되었는지")
+    void createBlank(){
+        Piece blank = Piece.createBlank();
+
+        assertFalse(blank.isBlack());
+        assertFalse(blank.isWhite());
+        assertEquals(Type.BLANK, blank.getType());
+        assertEquals(Color.NONE, blank.getColor());
     }
 }
