@@ -1,5 +1,6 @@
 package softeer2nd.domain;
 
+import softeer2nd.domain.VO.Position;
 import softeer2nd.domain.enums.Color;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import static softeer2nd.utils.StringUtils.SPACE;
 
 public class Board {
 
-    static final int MAX_SIZE = 8;
+    public static final int MAX_SIZE = 8;
     static final int INITIAL_PIECE_COUNT = 32;
     public static final String COLUMN_REPRESENTATION = "abcdefgh";
     private final int WHITE_PIECE_LINE = 6;
@@ -72,10 +73,13 @@ public class Board {
         return sb.toString();
     }
 
-    public void move(String position, Piece piece) {
+    public void move(String expression, Piece piece) {
+        Position position = Position.transfer(expression);
+        Rank target = ranks.get(position.getRow());
         // 제거
 
         // 추가
+        target.add(position.getCol(), piece);
     }
 
     public String getWhitePawnsResult() {
@@ -90,9 +94,8 @@ public class Board {
         return pieceCount;
     }
 
-    public Piece findPiece(String position) {
-        int col = position.charAt(0) - 'a';
-        int row = position.charAt(1) - '0';
-        return ranks.get(MAX_SIZE - row).find(col);
+    public Piece findPiece(String expression) {
+        Position position = Position.transfer(expression);
+        return ranks.get(position.getRow()).find(position.getCol());
     }
 }

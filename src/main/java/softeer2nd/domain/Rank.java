@@ -72,4 +72,8 @@ public class Rank {
     public Piece find(int position) {
         return pieces.get(position);
     }
+
+    public void add(int index, Piece piece) {
+        this.pieces.set(index, piece);
+    }
 }
