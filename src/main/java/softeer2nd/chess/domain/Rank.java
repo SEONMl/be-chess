@@ -1,14 +1,12 @@
-package softeer2nd.domain;
+package softeer2nd.chess.domain;
 
-import softeer2nd.domain.enums.Color;
-import softeer2nd.domain.enums.Type;
+import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Type;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static softeer2nd.domain.Board.MAX_SIZE;
 
 public class Rank {
     private List<Piece> pieces;
@@ -46,7 +44,7 @@ public class Rank {
 
     private static List<Piece> initSamePiecesArray(Type type, Color color) {
         List<Piece> pieces = new ArrayList<>();
-        for (int i = 0; i < MAX_SIZE; i++) {
+        for (int i = 0; i < Board.MAX_SIZE; i++) {
             pieces.add(Piece.createPiece(type, color));
         }
         return pieces;

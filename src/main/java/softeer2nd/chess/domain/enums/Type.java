@@ -1,4 +1,4 @@
-package softeer2nd.domain.enums;
+package softeer2nd.chess.domain.enums;
 
 public enum Type {
     BLANK('.', 0.0),

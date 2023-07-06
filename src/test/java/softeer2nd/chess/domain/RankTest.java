@@ -1,10 +1,12 @@
-package softeer2nd.domain;
+package softeer2nd.chess.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import softeer2nd.domain.enums.Color;
-import softeer2nd.domain.enums.Type;
+import softeer2nd.chess.domain.Board;
+import softeer2nd.chess.domain.Rank;
+import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Type;
 
 import static org.junit.jupiter.api.Assertions.*;
 

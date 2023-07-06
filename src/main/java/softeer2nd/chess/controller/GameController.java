@@ -1,6 +1,6 @@
-package softeer2nd.controller;
+package softeer2nd.chess.controller;
 
-import softeer2nd.domain.Board;
+import softeer2nd.chess.domain.Board;
 
 import java.util.Scanner;
 

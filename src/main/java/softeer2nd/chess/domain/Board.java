@@ -1,15 +1,15 @@
-package softeer2nd.domain;
+package softeer2nd.chess.domain;
 
-import softeer2nd.domain.VO.Position;
-import softeer2nd.domain.enums.Color;
-import softeer2nd.domain.enums.Type;
+import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Type;
+import softeer2nd.chess.domain.VO.Position;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static softeer2nd.utils.StringUtils.NEWLINE;
-import static softeer2nd.utils.StringUtils.SPACE;
+import static softeer2nd.chess.utils.StringUtils.NEWLINE;
+import static softeer2nd.chess.utils.StringUtils.SPACE;
 
 public class Board {
 

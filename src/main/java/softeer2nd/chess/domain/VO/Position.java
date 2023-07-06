@@ -1,6 +1,6 @@
-package softeer2nd.domain.VO;
+package softeer2nd.chess.domain.VO;
 
-import static softeer2nd.domain.Board.MAX_SIZE;
+import softeer2nd.chess.domain.Board;
 
 public class Position {
     private int row;
@@ -12,7 +12,7 @@ public class Position {
     }
 
     public static Position transfer(String expression) {
-        int row = MAX_SIZE - (expression.charAt(1) - '0');
+        int row = Board.MAX_SIZE - (expression.charAt(1) - '0');
         int col = expression.charAt(0) - 'a';
         return new Position(row, col);
     }

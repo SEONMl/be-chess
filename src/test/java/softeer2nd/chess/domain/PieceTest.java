@@ -1,9 +1,10 @@
-package softeer2nd.domain;
+package softeer2nd.chess.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import softeer2nd.domain.enums.Color;
-import softeer2nd.domain.enums.Type;
+import softeer2nd.chess.domain.Piece;
+import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

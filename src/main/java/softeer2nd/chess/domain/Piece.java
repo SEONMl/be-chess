@@ -1,7 +1,7 @@
-package softeer2nd.domain;
+package softeer2nd.chess.domain;
 
-import softeer2nd.domain.enums.Color;
-import softeer2nd.domain.enums.Type;
+import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Type;
 
 import java.util.Objects;
 

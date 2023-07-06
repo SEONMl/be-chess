@@ -1,7 +1,7 @@
-package softeer2nd;
+package softeer2nd.chess;
 
-import softeer2nd.controller.GameController;
-import softeer2nd.domain.Board;
+import softeer2nd.chess.controller.GameController;
+import softeer2nd.chess.domain.Board;
 
 public class Main {
     public static void main(String[] args) {
