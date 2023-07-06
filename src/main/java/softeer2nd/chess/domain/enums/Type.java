@@ -11,11 +11,11 @@ public enum Type {
     ;
 
     private char representation;
-    private double score;
+    private double point;
 
-    private Type(char representation, double score) {
+    private Type(char representation, double point) {
         this.representation = representation;
-        this.score = score;
+        this.point = point;
     }
 
 
@@ -31,7 +31,7 @@ public enum Type {
         return this == BLANK;
     }
 
-    public double getScore() {
-        return score;
+    public double getPoint() {
+        return point;
     }
 }

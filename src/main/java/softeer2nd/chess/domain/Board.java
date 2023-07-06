@@ -130,7 +130,7 @@ public class Board {
             for (int col = 0; col < MAX_SIZE; col++) {
                 Piece target = ranks.get(row).find(col);
                 pointOfTypes.put(target.getType(),
-                        pointOfTypes.getOrDefault(target.getType(), 0D) + target.getType().getScore());
+                        pointOfTypes.getOrDefault(target.getType(), 0D) + target.getType().getPoint());
             }
         }
         System.out.println(pointOfTypes);

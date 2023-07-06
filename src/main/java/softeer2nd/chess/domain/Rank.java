@@ -75,7 +75,7 @@ public class Rank {
         return pieces.stream()
                 .filter(p -> p.getColor() == color)
                 .map(Piece::getType)
-                .mapToDouble(Type::getScore)
+                .mapToDouble(Type::getPoint)
                 .sum();
     }
 }
