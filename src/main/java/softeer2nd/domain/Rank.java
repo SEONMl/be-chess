@@ -1,7 +1,7 @@
 package softeer2nd.domain;
 
-import softeer2nd.domain.VO.Color;
-import softeer2nd.domain.VO.Type;
+import softeer2nd.domain.enums.Color;
+import softeer2nd.domain.enums.Type;
 
 import java.util.ArrayList;
 import java.util.Arrays;

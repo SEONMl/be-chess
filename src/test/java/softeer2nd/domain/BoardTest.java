@@ -30,4 +30,16 @@ public class BoardTest {
         assertEquals(Piece.createWhiteRook(), board.findPiece("h1"));
     }
 
+    @Test
+    void move() throws Exception {
+        board.initializeEmpty();
+
+        String position = "b5";
+        Piece piece = Piece.createBlackRook();
+        board.move(position, piece);
+
+        assertEquals(piece, board.findPiece(position));
+        System.out.println(board.show());
+    }
+
 }

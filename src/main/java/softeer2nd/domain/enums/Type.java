@@ -1,4 +1,4 @@
-package softeer2nd.domain.VO;
+package softeer2nd.domain.enums;
 
 public enum Type {
     PAWN('p'),

@@ -1,6 +1,6 @@
 package softeer2nd.domain;
 
-import softeer2nd.domain.VO.Color;
+import softeer2nd.domain.enums.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +41,13 @@ public class Board {
         );
     }
 
+    public void initializeEmpty() {
+        ranks = new ArrayList<>();
+        for (int i = 0; i < MAX_SIZE; i++) {
+            ranks.add(Rank.initBlankArray());
+        }
+    }
+
     public String show() {
         StringBuilder sb = new StringBuilder();
 
@@ -63,6 +70,12 @@ public class Board {
                 .append(NEWLINE);
 
         return sb.toString();
+    }
+
+    public void move(String position, Piece piece) {
+        // 제거
+
+        // 추가
     }
 
     public String getWhitePawnsResult() {
