@@ -4,10 +4,7 @@ import softeer2nd.domain.VO.Position;
 import softeer2nd.domain.enums.Color;
 import softeer2nd.domain.enums.Type;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -104,7 +101,7 @@ public class Board {
 
     public double calculatePoint(Color color) {
         double totalPoint = ranks.stream()
-                .mapToDouble(rank -> rank.calculatePoint(color))
+                .mapToDouble(rank -> rank.sumPoint(color))
                 .sum();
 
         // Pawn 만 따로 계산 : 점수 - 개수*0.5
@@ -112,18 +109,30 @@ public class Board {
         for (int i = 0; i < MAX_SIZE; i++) {
             for (int j = 0; j < MAX_SIZE; j++) {
                 Piece target = ranks.get(i).find(j);
-                if(target.equalsTypeAndColor(Type.PAWN, color)){
-                    countOfPawns[j] ++;
+                if (target.equalsTypeAndColor(Type.PAWN, color)) {
+                    countOfPawns[j]++;
                 }
             }
         }
 
-        for(int i=0;i<MAX_SIZE;i++){
-            if(countOfPawns[i]>1) {
-                totalPoint-= countOfPawns[i]*0.5;
+        for (int i = 0; i < MAX_SIZE; i++) {
+            if (countOfPawns[i] > 1) {
+                totalPoint -= countOfPawns[i] * 0.5;
             }
         }
 
         return totalPoint;
+    }
+
+    public void sortScore(Color color) {
+        SortedMap<Type, Double> pointOfTypes = new TreeMap<>();
+        for (int i = 0; i < MAX_SIZE; i++) {
+            for (int j = 0; j < MAX_SIZE; j++) {
+                Piece target = ranks.get(i).find(j);
+                pointOfTypes.put(target.getType(),
+                        pointOfTypes.getOrDefault(target.getType(), 0D) + target.getType().getScore());
+            }
+        }
+        System.out.println(pointOfTypes);
     }
 }

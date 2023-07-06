@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import static softeer2nd.domain.Board.MAX_SIZE;
 
 public class Rank {
-    List<Piece> pieces;
+    private List<Piece> pieces;
 
     private Rank(List<Piece> pieces) {
         this.pieces = pieces;
@@ -77,7 +77,7 @@ public class Rank {
         this.pieces.set(index, piece);
     }
 
-    public double calculatePoint(Color color) {
+    public double sumPoint(Color color) {
         return pieces.stream()
                 .filter(p -> p.getColor() == color)
                 .map(Piece::getType)

@@ -64,10 +64,10 @@ public class BoardTest {
         assertEquals(8.0, board.calculatePoint(Color.WHITE), 0.01);
 
         System.out.println(board.show());
+        board.sortScore(Color.BLACK);
     }
 
     private void addPiece(String position, Piece piece) {
         board.move(position, piece);
     }
-
 }
