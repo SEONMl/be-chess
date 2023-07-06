@@ -78,6 +78,13 @@ public class Piece {
         return new Piece(type, Color.BLACK);
     }
 
+    public char representationOf() {
+        char representation = this.type.getRepresentation();
+        if(this.color.isBlack()) {
+            return Character.toUpperCase(representation);
+        }
+        return representation;
+    }
     public Color getColor() {
         return color;
     }

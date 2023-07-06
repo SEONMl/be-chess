@@ -54,11 +54,7 @@ public class Rank {
 
     public String show() {
         return pieces.stream()
-                .map(p -> {
-                    char representation = p.getType().getRepresentation();
-                    if (p.isBlack()) representation = Character.toUpperCase(representation);
-                    return representation;
-                })
+                .map(Piece::representationOf)
                 .map(String::valueOf)
                 .collect(Collectors.joining());
     }

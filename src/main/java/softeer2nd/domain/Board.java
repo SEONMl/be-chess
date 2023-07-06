@@ -19,7 +19,7 @@ public class Board {
     private final int WHITE_PIECE_LINE = 6;
     private final int BLACK_PIECE_LINE = 1;
     private int pieceCount;
-    List<Rank> ranks;
+    private List<Rank> ranks;
 
     public Board() {
         initialize();
@@ -106,18 +106,18 @@ public class Board {
 
         // Pawn 만 따로 계산 : 점수 - 개수*0.5
         int countOfPawns[] = new int[MAX_SIZE];
-        for (int i = 0; i < MAX_SIZE; i++) {
-            for (int j = 0; j < MAX_SIZE; j++) {
-                Piece target = ranks.get(i).find(j);
+        for (int row = 0; row < MAX_SIZE; row++) {
+            for (int col = 0; col < MAX_SIZE; col++) {
+                Piece target = ranks.get(row).find(col);
                 if (target.equalsTypeAndColor(Type.PAWN, color)) {
-                    countOfPawns[j]++;
+                    countOfPawns[col]++;
                 }
             }
         }
 
-        for (int i = 0; i < MAX_SIZE; i++) {
-            if (countOfPawns[i] > 1) {
-                totalPoint -= countOfPawns[i] * 0.5;
+        for (int col = 0; col < MAX_SIZE; col++) {
+            if (countOfPawns[col] > 1) {
+                totalPoint -= countOfPawns[col] * 0.5;
             }
         }
 
@@ -126,9 +126,9 @@ public class Board {
 
     public void sortScore(Color color) {
         SortedMap<Type, Double> pointOfTypes = new TreeMap<>();
-        for (int i = 0; i < MAX_SIZE; i++) {
-            for (int j = 0; j < MAX_SIZE; j++) {
-                Piece target = ranks.get(i).find(j);
+        for (int row = 0; row < MAX_SIZE; row++) {
+            for (int col = 0; col < MAX_SIZE; col++) {
+                Piece target = ranks.get(row).find(col);
                 pointOfTypes.put(target.getType(),
                         pointOfTypes.getOrDefault(target.getType(), 0D) + target.getType().getScore());
             }
