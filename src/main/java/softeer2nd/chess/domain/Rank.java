@@ -1,5 +1,7 @@
 package softeer2nd.chess.domain;
 
+import org.ietf.jgss.Oid;
+import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.domain.enums.Type;
 
@@ -7,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static softeer2nd.chess.domain.Board.BLACK_PIECE_LINE;
+import static softeer2nd.chess.domain.Board.WHITE_PIECE_LINE;
 
 public class Rank {
     private List<Piece> pieces;
@@ -20,32 +25,42 @@ public class Rank {
     }
 
     public static Rank createPawnArray(Color color) {
-        return new Rank(createSamePiecesArray(Type.PAWN, color));
+        int row = WHITE_PIECE_LINE + 1;
+        if (color.isBlack()) {
+            row = BLACK_PIECE_LINE - 1;
+        }
+        return new Rank(createSamePiecesArray(Type.PAWN, color, row));
     }
 
-    public static Rank createBlankArray() {
-        return new Rank(createSamePiecesArray(Type.BLANK, Color.NONE));
+    public static Rank createBlankArray(int initialRow) {
+        return new Rank(createSamePiecesArray(Type.BLANK, Color.NONE, initialRow));
     }
 
     public static Rank createDifferentPieceArray(Color color) {
-        List<Piece> result = Arrays.asList(
-                Piece.createPiece(Type.ROOK, color),
-                Piece.createPiece(Type.KNIGHT, color),
-                Piece.createPiece(Type.BISHOP, color),
-                Piece.createPiece(Type.QUEEN, color),
+        int row = WHITE_PIECE_LINE;
+        if (color.isBlack()) {
+            row = BLACK_PIECE_LINE;
+        }
 
-                Piece.createPiece(Type.KING, color),
-                Piece.createPiece(Type.BISHOP, color),
-                Piece.createPiece(Type.KNIGHT, color),
-                Piece.createPiece(Type.ROOK, color)
+        List<Piece> result = Arrays.asList( //gg
+                Piece.create(Type.ROOK, color, new Position(row, 0)),
+                Piece.create(Type.KNIGHT, color, new Position(row, 1)),
+                Piece.create(Type.BISHOP, color, new Position(row, 2)),
+                Piece.create(Type.QUEEN, color, new Position(row, 3)),
+
+                Piece.create(Type.KING, color, new Position(row, 4)),
+                Piece.create(Type.BISHOP, color, new Position(row, 5)),
+                Piece.create(Type.KNIGHT, color, new Position(row, 6)),
+                Piece.create(Type.ROOK, color, new Position(row, 7))
         );
         return new Rank(new ArrayList<>(result));
     }
 
-    private static List<Piece> createSamePiecesArray(Type type, Color color) {
+    private static List<Piece> createSamePiecesArray(Type type, Color color, int row) {
         List<Piece> pieces = new ArrayList<>();
+
         for (int i = 0; i < Board.MAX_SIZE; i++) {
-            pieces.add(Piece.createPiece(type, color));
+            pieces.add(Piece.create(type, color, new Position(row, i)));
         }
         return pieces;
     }
@@ -67,8 +82,10 @@ public class Rank {
         return pieces.get(position);
     }
 
-    public void add(int index, Piece piece) {
-        this.pieces.set(index, piece);
+    public void add(Position position, Piece piece) {
+        int col = position.getCol();
+        Piece newPiece = Piece.create(piece, position);
+        this.pieces.set(col, newPiece);
     }
 
     public double sumPoint(Color color) {
@@ -77,5 +94,13 @@ public class Rank {
                 .map(Piece::getType)
                 .mapToDouble(Type::getPoint)
                 .sum();
+    }
+
+    public Piece delete(Position position) {
+        int col = position.getCol();
+        Piece beforeChange = find(col);
+        // position 같은 객체..?
+        this.pieces.set(col, Piece.createBlank(position));
+        return beforeChange;
     }
 }

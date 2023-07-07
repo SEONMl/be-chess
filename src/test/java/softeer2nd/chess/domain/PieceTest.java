@@ -2,7 +2,7 @@ package softeer2nd.chess.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import softeer2nd.chess.domain.Piece;
+import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.domain.enums.Type;
 
@@ -12,34 +12,25 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class PieceTest {
 
-    @Test
-    @DisplayName("색깔을 가진 폰이 생성되어야 한다.")
-    public void createPawn() {
-        verifyPawn(Type.PAWN, Color.WHITE);
-        verifyPawn(Type.KING, Color.BLACK);
-    }
-
-    void verifyPawn(final Type type, final Color color) {
-        Piece piece = Piece.createPiece(type, color);
-        assertThat(piece.getColor()).isEqualTo(color);
-    }
+    private Position samplePosition = Position.transfer("a1");
 
     @Test
     @DisplayName("기물과 색깔 별로 인스턴스 생성되는지?")
     void createPiece() {
-        verifyPiece(Piece.createWhitePawn(), Type.PAWN, Color.WHITE);
-        verifyPiece(Piece.createWhiteKing(), Type.KING, Color.WHITE);
-        verifyPiece(Piece.createWhiteBishop(), Type.BISHOP, Color.WHITE);
-        verifyPiece(Piece.createWhiteKnight(), Type.KNIGHT, Color.WHITE);
-        verifyPiece(Piece.createWhiteQueen(), Type.QUEEN, Color.WHITE);
-        verifyPiece(Piece.createWhiteRook(), Type.ROOK, Color.WHITE);
 
-        verifyPiece(Piece.createBlackPawn(), Type.PAWN, Color.BLACK);
-        verifyPiece(Piece.createBlackKing(), Type.KING, Color.BLACK);
-        verifyPiece(Piece.createBlackBishop(), Type.BISHOP, Color.BLACK);
-        verifyPiece(Piece.createBlackKnight(), Type.KNIGHT, Color.BLACK);
-        verifyPiece(Piece.createBlackQueen(), Type.QUEEN, Color.BLACK);
-        verifyPiece(Piece.createBlackRook(), Type.ROOK, Color.BLACK);
+        verifyPiece(Piece.createWhitePawn(samplePosition), Type.PAWN, Color.WHITE);
+        verifyPiece(Piece.createWhiteKing(samplePosition), Type.KING, Color.WHITE);
+        verifyPiece(Piece.createWhiteBishop(samplePosition), Type.BISHOP, Color.WHITE);
+        verifyPiece(Piece.createWhiteKnight(samplePosition), Type.KNIGHT, Color.WHITE);
+        verifyPiece(Piece.createWhiteQueen(samplePosition), Type.QUEEN, Color.WHITE);
+        verifyPiece(Piece.createWhiteRook(samplePosition), Type.ROOK, Color.WHITE);
+
+        verifyPiece(Piece.createBlackPawn(samplePosition), Type.PAWN, Color.BLACK);
+        verifyPiece(Piece.createBlackKing(samplePosition), Type.KING, Color.BLACK);
+        verifyPiece(Piece.createBlackBishop(samplePosition), Type.BISHOP, Color.BLACK);
+        verifyPiece(Piece.createBlackKnight(samplePosition), Type.KNIGHT, Color.BLACK);
+        verifyPiece(Piece.createBlackQueen(samplePosition), Type.QUEEN, Color.BLACK);
+        verifyPiece(Piece.createBlackRook(samplePosition), Type.ROOK, Color.BLACK);
     }
 
     void verifyPiece(Piece piece, Type type, Color color) {
@@ -50,7 +41,7 @@ public class PieceTest {
     @Test
     @DisplayName("Blank 기물이 잘 생성되었는지")
     void createBlank(){
-        Piece blank = Piece.createBlank();
+        Piece blank = Piece.createBlank(samplePosition);
 
         assertFalse(blank.isBlack());
         assertFalse(blank.isWhite());

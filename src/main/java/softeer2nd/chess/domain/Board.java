@@ -16,8 +16,8 @@ public class Board {
     public static final int MAX_SIZE = 8;
     static final int INITIAL_PIECE_COUNT = 32;
     public static final String COLUMN_REPRESENTATION = "abcdefgh";
-    private final int WHITE_PIECE_LINE = 6;
-    private final int BLACK_PIECE_LINE = 1;
+    public static final int WHITE_PIECE_LINE = MAX_SIZE;
+    public static final int BLACK_PIECE_LINE = 0;
     private int pieceCount;
     private List<Rank> ranks;
 
@@ -31,10 +31,10 @@ public class Board {
                 Arrays.asList(
                         Rank.createDifferentPieceArray(Color.BLACK),
                         Rank.createPawnArray(Color.BLACK),
-                        Rank.createBlankArray(),
-                        Rank.createBlankArray(),
-                        Rank.createBlankArray(),
-                        Rank.createBlankArray(),
+                        Rank.createBlankArray(2),
+                        Rank.createBlankArray(3),
+                        Rank.createBlankArray(4),
+                        Rank.createBlankArray(5),
                         Rank.createPawnArray(Color.WHITE),
                         Rank.createDifferentPieceArray(Color.WHITE)
                 )
@@ -44,7 +44,7 @@ public class Board {
     public void initializeEmpty() {
         ranks = new ArrayList<>();
         for (int i = 0; i < MAX_SIZE; i++) {
-            ranks.add(Rank.createBlankArray());
+            ranks.add(Rank.createBlankArray(i));
         }
     }
 
@@ -72,13 +72,17 @@ public class Board {
         return sb.toString();
     }
 
-    public void move(String expression, Piece piece) {
-        Position position = Position.transfer(expression);
-        Rank target = ranks.get(position.getRow());
+    public void move(String src, String dst) {
+        Position srcPosition = Position.transfer(src);
+        Position dstPosition = Position.transfer(dst);
+
+        Rank target = ranks.get(srcPosition.getRow());
         // 제거
+        Piece beforeChange = target.delete(srcPosition);
 
         // 추가
-        target.add(position.getCol(), piece);
+        Rank nextTarget = ranks.get(dstPosition.getRow());
+        nextTarget.add(dstPosition, beforeChange);
     }
 
     public String getWhitePawnsResult() {
@@ -126,6 +130,7 @@ public class Board {
 
     public void sortScore(Color color) {
         SortedMap<Type, Double> pointOfTypes = new TreeMap<>();
+
         for (int row = 0; row < MAX_SIZE; row++) {
             for (int col = 0; col < MAX_SIZE; col++) {
                 Piece target = ranks.get(row).find(col);
