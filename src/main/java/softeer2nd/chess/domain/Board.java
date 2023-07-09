@@ -3,6 +3,7 @@ package softeer2nd.chess.domain;
 import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.domain.enums.Type;
 import softeer2nd.chess.domain.VO.Position;
+import softeer2nd.chess.domain.pieces.Piece;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,6 +24,10 @@ public class Board {
 
     public Board() {
         initialize();
+    }
+
+    private Board(final List<Rank> ranks) {
+        this.ranks = ranks;
     }
 
     public void initialize() {
@@ -63,7 +68,7 @@ public class Board {
         int offsetRow = MAX_SIZE - row;
         StringBuilder sb = new StringBuilder();
 
-        sb.append(ranks.get(row).show())
+        sb.append(showRank(row))
                 .append(SPACE)
                 .append(offsetRow)
                 .append(SPACE)
@@ -71,6 +76,7 @@ public class Board {
 
         return sb.toString();
     }
+
 
     public void move(String src, String dst) {
         Position srcPosition = Position.transfer(src);
@@ -86,11 +92,15 @@ public class Board {
     }
 
     public String getWhitePawnsResult() {
-        return ranks.get(WHITE_PIECE_LINE).show();
+        return showRank(WHITE_PIECE_LINE);
     }
 
     public String getBlackPawnsResult() {
-        return ranks.get(BLACK_PIECE_LINE).show();
+        return showRank(BLACK_PIECE_LINE);
+    }
+
+    private String showRank(int row) {
+        return ranks.get(row).show();
     }
 
     public int pieceCount() {
@@ -109,23 +119,36 @@ public class Board {
                 .sum();
 
         // Pawn 만 따로 계산 : 점수 - 개수*0.5
-        int countOfPawns[] = new int[MAX_SIZE];
+        List<Integer> countOfPawns = countPawnsInRow(color);
+        totalPoint += offsetPointWhenInRow(countOfPawns);
+
+        return totalPoint;
+    }
+
+    private static double offsetPointWhenInRow(List<Integer> countOfPawns) {
+        int offsetPoint = 0;
+        for (int col = 0; col < MAX_SIZE; col++) {
+            if (countOfPawns.get(col) > 1) {
+                offsetPoint -= countOfPawns.get(col) * 0.5;
+            }
+        }
+        return offsetPoint;
+    }
+
+    private List<Integer> countPawnsInRow(Color color) {
+        List<Integer> rowCountOfPawns = new ArrayList<>(Collections.nCopies(MAX_SIZE, 0));
         for (int row = 0; row < MAX_SIZE; row++) {
             for (int col = 0; col < MAX_SIZE; col++) {
-                Piece target = ranks.get(row).find(col);
-                if (target.equalsTypeAndColor(Type.PAWN, color)) {
-                    countOfPawns[col]++;
+                if (existColoredPawnAt(row, col, color)) {
+                    rowCountOfPawns.set(row, rowCountOfPawns.get(row) + 1);
                 }
             }
         }
+        return rowCountOfPawns;
+    }
 
-        for (int col = 0; col < MAX_SIZE; col++) {
-            if (countOfPawns[col] > 1) {
-                totalPoint -= countOfPawns[col] * 0.5;
-            }
-        }
-
-        return totalPoint;
+    private boolean existColoredPawnAt(int row, int col, Color color) {
+        return ranks.get(row).find(col).equalsTypeAndColor(Type.PAWN, color);
     }
 
     public void sortScore(Color color) {
@@ -135,7 +158,8 @@ public class Board {
             for (int col = 0; col < MAX_SIZE; col++) {
                 Piece target = ranks.get(row).find(col);
                 pointOfTypes.put(target.getType(),
-                        pointOfTypes.getOrDefault(target.getType(), 0D) + target.getType().getPoint());
+                        pointOfTypes.getOrDefault(target.getType(), 0D)
+                                + target.getType().getPoint());
             }
         }
         System.out.println(pointOfTypes);

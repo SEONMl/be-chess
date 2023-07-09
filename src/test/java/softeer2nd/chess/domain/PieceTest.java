@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.domain.enums.Type;
+import softeer2nd.chess.domain.pieces.Piece;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
