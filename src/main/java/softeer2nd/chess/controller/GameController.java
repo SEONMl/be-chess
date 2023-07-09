@@ -1,6 +1,8 @@
 package softeer2nd.chess.controller;
 
 import softeer2nd.chess.domain.Board;
+import softeer2nd.chess.view.InputView;
+import softeer2nd.chess.view.OutputView;
 
 import java.util.Scanner;
 
@@ -8,39 +10,46 @@ import static softeer2nd.chess.utils.StringUtils.SPACE;
 
 public class GameController {
     private final String MOVE_COMMAND = "move";
+    private final String EXIT_COMMAND = "exit";
+
+    private final InputView inputView;
+    private final OutputView outputView;
     private Board chessBoard;
-    private Scanner sc;
-    private int round;
+    private final Scanner sc;
+
 
     public GameController(Board newBoard) {
-        chessBoard = newBoard;
-        sc = new Scanner(System.in);
-        round = 0;
+        this.chessBoard = newBoard;
+        this.inputView = new InputView();
+        this.outputView = new OutputView();
+        this.sc = new Scanner(System.in);
     }
 
     public void start() {
         chessBoard.initialize();
-        System.out.println(chessBoard.show());
+        inputView.gameStart();
         run();
     }
 
     void run() {
-        System.out.println("0 입력 시 종료됩니다.");
+        int round = 0;
         while (true) {
-            System.out.print(round % 2 + 1 + "님 입력 >>> ");
+            inputView.beforeMove(round);
             round++;
             String cmd = sc.nextLine();
-            if (cmd.equals("0")) break;
+            if (exit(cmd)) {
+                break;
+            }
 
             isStartWithMove(cmd);
-
-            System.out.println(chessBoard.show());
+            outputView.afterMove(chessBoard.show());
         }
-        System.out.println("게임이 종료됐습니다.");
+        outputView.gameEnd();
     }
+
     private void isStartWithMove(String command) {
-        if(command.startsWith(MOVE_COMMAND)) {
-            String[] splitCommand  = command.split(SPACE);
+        if (command.startsWith(MOVE_COMMAND)) {
+            String[] splitCommand = command.split(SPACE);
             commandMove(splitCommand[1], splitCommand[2]);
         }
     }
@@ -48,4 +57,9 @@ public class GameController {
     private void commandMove(String srcPosition, String dstPosition) {
         chessBoard.move(srcPosition, dstPosition);
     }
+
+    private boolean exit(String command) {
+        return command.equals(EXIT_COMMAND);
+    }
+
 }
