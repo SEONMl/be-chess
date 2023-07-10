@@ -47,8 +47,11 @@ public class BoardTest {
     @DisplayName("체스판 위의 기물을 선택해서 이동이 되는가?")
     void move() throws Exception {
         board.initialize();
-        String srcPosition = "b1";
-        String dstPosition = "c3";
+        String src = "b1";
+        String dst = "c3";
+        Position srcPosition = Position.transfer(srcPosition);
+        Position dstPosition = Position.transfer(dstPosition);
+
 
         board.move(srcPosition, dstPosition);
 

@@ -86,8 +86,11 @@ public class Rank {
                 .count();
     }
 
-    public Piece find(int position) {
-        return pieces.get(position);
+    public boolean isEmptyPlace(int col) {
+        return pieces.get(col).getType() == Type.BLANK;
+    }
+    public Piece find(int col) {
+        return pieces.get(col);
     }
 
     public void add(Position position, Piece piece) {

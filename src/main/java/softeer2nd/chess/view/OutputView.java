@@ -9,7 +9,7 @@ public class OutputView {
         print(boardResult);
     }
 
-    private void print(String content) {
+    public void print(String content) {
         System.out.println(content);
     }
 }

@@ -1,6 +1,7 @@
 package softeer2nd.chess.controller;
 
 import softeer2nd.chess.domain.Board;
+import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.view.InputView;
 import softeer2nd.chess.view.OutputView;
 
@@ -34,32 +35,49 @@ public class GameController {
     void run() {
         int round = 0;
         while (true) {
-            inputView.beforeMove(round);
+            String command = inputCommandUntilPossibleToMove(round);
             round++;
-            String cmd = sc.nextLine();
-            if (exit(cmd)) {
+            if (exit(command)) {
                 break;
             }
-
-            isStartWithMove(cmd);
             outputView.afterMove(chessBoard.show());
         }
         outputView.gameEnd();
     }
 
-    private void isStartWithMove(String command) {
+    private String inputCommandUntilPossibleToMove(int round){
+        boolean result = true;
+        String command = "";
+        while(result){
+            result = false;
+            inputView.beforeMove(round);
+            command = sc.nextLine();
+            try{
+                isStartWithMove(command);
+            }catch (IllegalAccessException e) {
+                outputView.print(e.toString());
+                result = true;
+            }
+        }
+        return command;
+    }
+
+    private void isStartWithMove(String command) throws IllegalAccessException {
         if (command.startsWith(MOVE_COMMAND)) {
             String[] splitCommand = command.split(SPACE);
             commandMove(splitCommand[1], splitCommand[2]);
         }
     }
 
-    private void commandMove(String srcPosition, String dstPosition) {
+    private void commandMove(String src, String dst) throws IllegalAccessException {
+        Position srcPosition = Position.transfer(src);
+        Position dstPosition = Position.transfer(dst);
+        chessBoard.possibleToMove(srcPosition, dstPosition);
         chessBoard.move(srcPosition, dstPosition);
     }
 
     private boolean exit(String command) {
-        return command.equals(EXIT_COMMAND);
+        return command.startsWith(EXIT_COMMAND);
     }
 
 }

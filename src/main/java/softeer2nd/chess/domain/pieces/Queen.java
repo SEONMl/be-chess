@@ -1,6 +1,7 @@
 package softeer2nd.chess.domain.pieces;
 
 import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
 
 public class Queen implements Piece {
@@ -8,8 +9,13 @@ public class Queen implements Piece {
     private final Type type;
 
     Queen(Color color) {
-        this.color=color;
+        this.color = color;
         this.type = Type.QUEEN;
+    }
+
+    @Override
+    public boolean verifyMovePosition(Direction direction, int count) {
+        return Direction.everyDirection().contains(direction);
     }
 
     @Override

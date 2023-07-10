@@ -1,6 +1,7 @@
 package softeer2nd.chess.domain.pieces;
 
 import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
 
 public class Rook implements Piece {
@@ -10,6 +11,11 @@ public class Rook implements Piece {
     Rook(Color color) {
         this.color = color;
         this.type = Type.ROOK;
+    }
+
+    @Override
+    public boolean verifyMovePosition(Direction direction, int count) {
+        return false;
     }
 
     @Override

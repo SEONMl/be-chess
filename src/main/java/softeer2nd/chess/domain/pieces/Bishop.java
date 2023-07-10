@@ -1,12 +1,18 @@
 package softeer2nd.chess.domain.pieces;
 
+import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
 
 public class Bishop implements Piece {
     private final Color color;
-    private final Type type;
+    private final Type type; // 없애고 싶다...
 
+    @Override
+    public boolean verifyMovePosition(Direction direction, int count) {
+        return false;
+    }
 
     Bishop(Color color) {
         this.color = color;

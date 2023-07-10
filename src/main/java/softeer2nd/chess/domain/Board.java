@@ -1,6 +1,7 @@
 package softeer2nd.chess.domain;
 
 import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
 import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.pieces.Piece;
@@ -15,11 +16,9 @@ import static softeer2nd.chess.utils.StringUtils.SPACE;
 public class Board {
 
     public static final int MAX_SIZE = 8;
-    static final int INITIAL_PIECE_COUNT = 32;
     public static final String COLUMN_REPRESENTATION = "abcdefgh";
     public static final int WHITE_PIECE_LINE = MAX_SIZE;
     public static final int BLACK_PIECE_LINE = 0;
-    private int pieceCount;
     private List<Rank> ranks;
 
     public Board() {
@@ -31,7 +30,6 @@ public class Board {
     }
 
     public void initialize() {
-        pieceCount = INITIAL_PIECE_COUNT;
         ranks = new ArrayList<>(
                 Arrays.asList(
                         Rank.createDifferentPieceArray(Color.BLACK),
@@ -46,12 +44,50 @@ public class Board {
         );
     }
 
-    public void initializeEmpty() {
-        ranks = new ArrayList<>();
-        for (int i = 0; i < MAX_SIZE; i++) {
-            ranks.add(Rank.createBlankArray(i));
+
+    public boolean possibleToMove(Position src, Position dst) throws IllegalAccessException {
+        Piece target = ranks.get(src.getRow()).find(dst.getCol());
+        // Direction, count로 변환
+        Direction direction = src.getDirection(dst);
+        if (direction.isNone()) {
+            throw new IllegalAccessException("올바른 이동이 아닙니다.");
         }
+        if (isKnightMoving(direction)) {
+            return true;
+        }
+
+        int x = src.getRow(); int y = src.getCol();
+        int nx = dst.getRow(); int ny = dst.getCol();
+        int count = Math.abs(nx - x);
+        if (nx - x == 0) {
+            count = Math.abs(ny - y);
+        }
+
+        // 타겟이 이동할 수 잇ㄴ느 방향인지?
+        // 가는 길에 다른 기물이 없는지?
+        if(target.verifyMovePosition(direction, count)
+                && nextStep(src.getRow(), src.getCol(), direction, count)) {
+            return true;
+        }
+        throw new IllegalAccessException("이동할 수 없는 입력입니다.");
     }
+
+    private boolean isKnightMoving(Direction direction) {
+        return Direction.knightDirection().contains(direction);
+    }
+
+    private boolean nextStep(int row, int col, Direction direction, int count) {
+        if(count ==0 ) return true;
+        boolean result = true;
+
+        if(ranks.get(row).isEmptyPlace(col)){
+            int nextRow = row+direction.getXDegree();
+            int nextCol = col+direction.getYDegree();
+            result &= nextStep(nextRow, nextCol, direction, count-1);
+        }
+        return result;
+    }
+
 
     public String show() {
         StringBuilder sb = new StringBuilder();
@@ -78,10 +114,7 @@ public class Board {
     }
 
 
-    public void move(String src, String dst) {
-        Position srcPosition = Position.transfer(src);
-        Position dstPosition = Position.transfer(dst);
-
+    public void move(Position srcPosition, Position dstPosition) {
         Rank target = ranks.get(srcPosition.getRow());
         // 제거
         Piece beforeChange = target.delete(srcPosition);
@@ -91,20 +124,8 @@ public class Board {
         nextTarget.add(dstPosition, beforeChange);
     }
 
-    public String getWhitePawnsResult() {
-        return showRank(WHITE_PIECE_LINE);
-    }
-
-    public String getBlackPawnsResult() {
-        return showRank(BLACK_PIECE_LINE);
-    }
-
     private String showRank(int row) {
         return ranks.get(row).show();
-    }
-
-    public int pieceCount() {
-        return pieceCount;
     }
 
     public Piece findPiece(String expression) {

@@ -9,3 +9,6 @@ public class Main {
         new GameController(board).start();
     }
 }
+/*
+처음에 설계를 매우 잘해야겠다는 느낌..
+ */
