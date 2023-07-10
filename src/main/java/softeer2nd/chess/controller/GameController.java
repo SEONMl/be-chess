@@ -2,6 +2,7 @@ package softeer2nd.chess.controller;
 
 import softeer2nd.chess.domain.Board;
 import softeer2nd.chess.domain.VO.Position;
+import softeer2nd.chess.utils.Validation;
 import softeer2nd.chess.view.InputView;
 import softeer2nd.chess.view.OutputView;
 
@@ -29,6 +30,7 @@ public class GameController {
     public void start() {
         chessBoard.initialize();
         inputView.gameStart();
+        outputView.afterMove(chessBoard.show());
         run();
     }
 
@@ -52,6 +54,10 @@ public class GameController {
             result = false;
             inputView.beforeMove(round);
             command = sc.nextLine();
+            if(exit(command)) {
+                break;
+            }
+
             try{
                 isStartWithMove(command);
             }catch (IllegalAccessException e) {
@@ -65,6 +71,8 @@ public class GameController {
     private void isStartWithMove(String command) throws IllegalAccessException {
         if (command.startsWith(MOVE_COMMAND)) {
             String[] splitCommand = command.split(SPACE);
+            Validation.isOutOfBoard(splitCommand[1]);
+            Validation.isOutOfBoard(splitCommand[2]);
             commandMove(splitCommand[1], splitCommand[2]);
         }
     }

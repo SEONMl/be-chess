@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 
 import static softeer2nd.chess.utils.StringUtils.NEWLINE;
 import static softeer2nd.chess.utils.StringUtils.SPACE;
+import static softeer2nd.chess.utils.Validation.*;
 
 public class Board {
 
@@ -45,19 +46,21 @@ public class Board {
     }
 
 
-    public boolean possibleToMove(Position src, Position dst) throws IllegalAccessException {
+    public void possibleToMove(Position src, Position dst) throws IllegalAccessException {
         Piece target = ranks.get(src.getRow()).find(src.getCol());
         // Direction, count로 변환
         Direction direction = src.getDirection(dst);
         if (direction.isNone()) {
-            throw new IllegalAccessException("올바른 이동이 아닙니다.");
+            NOT_A_MOVE_COMMAND();
         }
         if (target.getType() == Type.KNIGHT && isKnightMoving(direction)) {
-            return true;
+            return;
         }
 
-        int x = src.getRow(); int y = src.getCol();
-        int nx = dst.getRow(); int ny = dst.getCol();
+        int x = src.getRow();
+        int y = src.getCol();
+        int nx = dst.getRow();
+        int ny = dst.getCol();
         int count = Math.abs(nx - x);
         if (nx - x == 0) {
             count = Math.abs(ny - y);
@@ -65,11 +68,12 @@ public class Board {
 
         // 타겟이 이동할 수 잇ㄴ느 방향인지?
         // 가는 길에 다른 기물이 없는지?
-        if(target.verifyMovePosition(direction, count)
-                && nextStep(src.getRow(), src.getCol(), direction, count)) {
-            return true;
+        if (!target.verifyMovePosition(direction, count)){
+            NOT_ALLOW_DIRECTION();
         }
-        throw new IllegalAccessException("이동할 수 없는 입력입니다.");
+        if(!nextStep(src.getRow(), src.getCol(), direction, count)) {
+            THROW_ALREADY_PIECE_EXIST();
+        }
     }
 
     private boolean isKnightMoving(Direction direction) {
@@ -77,14 +81,15 @@ public class Board {
     }
 
     private boolean nextStep(int row, int col, Direction direction, int count) {
-        if(count ==0 ) return true;
+        if (count == 0) return true;
         boolean result = true;
 
-        if(ranks.get(row).isEmptyPlace(col)){
-            int nextRow = row+direction.getXDegree();
-            int nextCol = col+direction.getYDegree();
-            result &= nextStep(nextRow, nextCol, direction, count-1);
+        int nextRow = row - direction.getXDegree();
+        int nextCol = col - direction.getYDegree();
+        if (!ranks.get(nextRow).isEmptyPlace(nextCol)) {
+            return false;
         }
+        result &= nextStep(nextRow, nextCol, direction, count - 1);
         return result;
     }
 

@@ -7,7 +7,7 @@ public enum Direction {
     NORTHEAST(1, 1),
     EAST(0, 1),
     SOUTHEAST(-1, 1),
-    SOUTH(-1,  0),
+    SOUTH(-1, 0),
     SOUTHWEST(-1, -1),
     WEST(0, -1),
     NORTHWEST(1, -1),
@@ -47,8 +47,14 @@ public enum Direction {
     }
 
     private boolean isSame(int x, int y) {
-        if (x == 0) y /= Math.abs(y);
-        else if (y == 0) x /= Math.abs(x);
+        int absX = Math.abs(x);
+        int absY = Math.abs(y);
+        if (x == 0) y /= absY;
+        else if (y == 0) x /= absX;
+        if (absX == absY) {
+            x /= absX;
+            y /= absY;
+        }
         return xDegree == x && yDegree == y;
     }
 
