@@ -15,7 +15,7 @@ public class Rook implements Piece {
 
     @Override
     public boolean verifyMovePosition(Direction direction, int count) {
-        return false;
+        return Direction.linearDirection().contains(direction);
     }
 
     @Override

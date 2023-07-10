@@ -11,7 +11,7 @@ public class Bishop implements Piece {
 
     @Override
     public boolean verifyMovePosition(Direction direction, int count) {
-        return false;
+        return Direction.diagonalDirection().contains(direction);
     }
 
     Bishop(Color color) {

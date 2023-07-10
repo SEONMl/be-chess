@@ -33,7 +33,7 @@ public class Rank {
         return new Rank(createSamePiecesArray(Type.PAWN, color));
     }
 
-    public static Rank createBlankArray(int initialRow) {
+    public static Rank createBlankArray() {
         return new Rank(createSamePiecesArray(Type.BLANK, Color.NONE));
     }
 

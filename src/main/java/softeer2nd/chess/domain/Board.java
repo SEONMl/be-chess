@@ -34,10 +34,10 @@ public class Board {
                 Arrays.asList(
                         Rank.createDifferentPieceArray(Color.BLACK),
                         Rank.createPawnArray(Color.BLACK),
-                        Rank.createBlankArray(2),
-                        Rank.createBlankArray(3),
-                        Rank.createBlankArray(4),
-                        Rank.createBlankArray(5),
+                        Rank.createBlankArray(),
+                        Rank.createBlankArray(),
+                        Rank.createBlankArray(),
+                        Rank.createBlankArray(),
                         Rank.createPawnArray(Color.WHITE),
                         Rank.createDifferentPieceArray(Color.WHITE)
                 )
@@ -46,13 +46,13 @@ public class Board {
 
 
     public boolean possibleToMove(Position src, Position dst) throws IllegalAccessException {
-        Piece target = ranks.get(src.getRow()).find(dst.getCol());
+        Piece target = ranks.get(src.getRow()).find(src.getCol());
         // Direction, count로 변환
         Direction direction = src.getDirection(dst);
         if (direction.isNone()) {
             throw new IllegalAccessException("올바른 이동이 아닙니다.");
         }
-        if (isKnightMoving(direction)) {
+        if (target.getType() == Type.KNIGHT && isKnightMoving(direction)) {
             return true;
         }
 

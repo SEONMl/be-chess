@@ -13,9 +13,18 @@ public class Pawn implements Piece {
         this.type = Type.PAWN;
     }
 
+//    public boolean attackMove(Direction direction, int count) {
+//        if(color.isBlack()){
+//
+//        }
+//    }
+
     @Override
     public boolean verifyMovePosition(Direction direction, int count) {
-        return false;
+        if (color.isBlack()) {
+            return Direction.SOUTH == direction && count == 1;
+        }
+        return Direction.NORTH == direction && count == 1;
     }
 
     @Override
