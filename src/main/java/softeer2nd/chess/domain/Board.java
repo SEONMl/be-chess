@@ -1,9 +1,9 @@
 package softeer2nd.chess.domain;
 
+import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
-import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.pieces.Piece;
 
 import java.util.*;
@@ -68,10 +68,10 @@ public class Board {
 
         // 타겟이 이동할 수 잇ㄴ느 방향인지?
         // 가는 길에 다른 기물이 없는지?
-        if (!target.verifyMovePosition(direction, count)){
+        if (!target.verifyMovePosition(direction, count)) {
             NOT_ALLOW_DIRECTION();
         }
-        if(!nextStep(src.getRow(), src.getCol(), direction, count)) {
+        if (!nextStep(src.getRow(), src.getCol(), direction, count)) {
             THROW_ALREADY_PIECE_EXIST();
         }
     }
@@ -133,8 +133,7 @@ public class Board {
         return ranks.get(row).show();
     }
 
-    public Piece findPiece(String expression) {
-        Position position = Position.transfer(expression);
+    public Piece findPiece(Position position) {
         Rank target = ranks.get(position.getRow());
         return target.find(position.getCol());
     }
@@ -166,7 +165,7 @@ public class Board {
         for (int row = 0; row < MAX_SIZE; row++) {
             for (int col = 0; col < MAX_SIZE; col++) {
                 if (existColoredPawnAt(row, col, color)) {
-                    rowCountOfPawns.set(row, rowCountOfPawns.get(row) + 1);
+                    rowCountOfPawns.set(col, rowCountOfPawns.get(col) + 1);
                 }
             }
         }
