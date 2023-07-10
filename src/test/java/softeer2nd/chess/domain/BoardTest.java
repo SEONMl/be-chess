@@ -3,9 +3,9 @@ package softeer2nd.chess.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import softeer2nd.chess.domain.pieces.Piece;
 import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.pieces.PieceFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,10 +23,11 @@ public class BoardTest {
     void findPiece() throws Exception {
         board.initialize();
 
-        assertEquals(Piece.createBlackRook(Position.transfer("a8")), board.findPiece("a8"));
-        assertEquals(Piece.createBlackRook(Position.transfer("h8")), board.findPiece("h8"));
-        assertEquals(Piece.createWhiteRook(Position.transfer("a1")), board.findPiece("a1"));
-        assertEquals(Piece.createWhiteRook(Position.transfer("h1")), board.findPiece("h1"));
+        Position expectWhiteRook = Position.transfer("a8");
+        Position expectBlackRook = Position.transfer("a1");
+
+        assertEquals(PieceFactory.createRook(Color.WHITE), board.findPiece(expectWhiteRook));
+        assertEquals(PieceFactory.createRook(Color.BLACK), board.findPiece(expectBlackRook));
     }
 
 
@@ -34,8 +35,9 @@ public class BoardTest {
     @DisplayName("체스판의 기물 점수 구하는가?")
     void calculatePoint() throws Exception {
         board.initialize();
+        double calculated = board.calculatePoint(Color.BLACK);
 
-        assertEquals(38.0, board.calculatePoint(Color.BLACK), 0.01);
+        assertEquals(38.0, calculated, 0.01);
         assertEquals(38.0, board.calculatePoint(Color.WHITE), 0.01);
 
         System.out.println(board.show());
@@ -49,15 +51,15 @@ public class BoardTest {
         board.initialize();
         String src = "b1";
         String dst = "c3";
-        Position srcPosition = Position.transfer(srcPosition);
-        Position dstPosition = Position.transfer(dstPosition);
+        Position srcPosition = Position.transfer(src);
+        Position dstPosition = Position.transfer(dst);
 
 
         board.move(srcPosition, dstPosition);
 
-        assertEquals(Piece.createBlank(Position.transfer(srcPosition)),
+        assertEquals(PieceFactory.createBlankPiece(),
                 board.findPiece(srcPosition));
-        assertEquals(Piece.createWhiteKnight(Position.transfer(dstPosition)),
+        assertEquals(PieceFactory.createKnight(Color.WHITE),
                 board.findPiece(dstPosition));
     }
 }
