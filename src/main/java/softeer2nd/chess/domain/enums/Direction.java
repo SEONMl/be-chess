@@ -85,4 +85,8 @@ public enum Direction {
     public static Set<Direction> blackPawnDirection() {
         return Set.of(SOUTH, SOUTHEAST, SOUTHWEST);
     }
+
+    public boolean isKnightMove() {
+        return knightDirection().contains(this);
+    }
 }

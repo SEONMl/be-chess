@@ -53,9 +53,6 @@ public class Board {
         if (direction.isNone()) {
             NOT_A_MOVE_COMMAND();
         }
-        if (target.getType() == Type.KNIGHT && isKnightMoving(direction)) {
-            return;
-        }
 
         int x = src.getRow();
         int y = src.getCol();
@@ -81,6 +78,7 @@ public class Board {
     }
 
     private boolean nextStep(int row, int col, Direction direction, int count) {
+        if(direction.isKnightMove()) return true;
         if (count == 0) return true;
         boolean result = true;
 
@@ -117,7 +115,6 @@ public class Board {
 
         return sb.toString();
     }
-
 
     public void move(Position srcPosition, Position dstPosition) {
         Rank target = ranks.get(srcPosition.getRow());

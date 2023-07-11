@@ -1,6 +1,5 @@
 package softeer2nd.chess.domain.pieces;
 
-import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
@@ -16,7 +15,7 @@ public class Knight implements Piece {
 
     @Override
     public boolean verifyMovePosition(Direction direction, int count) {
-        return false;
+        return Direction.knightDirection().contains(direction);
     }
 
     @Override
