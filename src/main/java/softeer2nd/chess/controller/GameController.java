@@ -38,11 +38,11 @@ public class GameController {
         int round = 0;
         while (true) {
             String command = inputCommandUntilPossibleToMove(round);
-            round++;
             if (exit(command)) {
                 break;
             }
             outputView.afterMove(chessBoard.show());
+            round++;
         }
         outputView.gameEnd();
     }
@@ -55,7 +55,7 @@ public class GameController {
             inputView.beforeMove(round);
             command = sc.nextLine();
             try {
-                isStartWithMove(command);
+                isStartWithMove(command, round);
             } catch (IllegalArgumentException e) {
                 outputView.print(e.toString());
                 enterCorrectly = true;
@@ -64,10 +64,12 @@ public class GameController {
         return command;
     }
 
-    private void isStartWithMove(String command) throws IllegalArgumentException {
+    private void isStartWithMove(String command, int round) throws IllegalArgumentException {
         if (command.startsWith(MOVE_COMMAND)) {
             String[] splitCommand = command.split(SPACE);
             validateCommand(splitCommand[1]);
+            moveOnlyYourPieces(splitCommand[1], round);
+
             validateCommand(splitCommand[2]);
             commandMove(splitCommand[1], splitCommand[2]);
         }
@@ -76,6 +78,13 @@ public class GameController {
     private void validateCommand(String command) throws IllegalArgumentException {
         Validation.isRegularCommand(command);
         Validation.isOutOfBoard(command);
+    }
+
+    private void moveOnlyYourPieces(String command, int round) { // 0: 흰, 1: 검
+        Position targetPosition = Position.transfer(command);
+        if (!chessBoard.checkMovableByColor(targetPosition, round)) {
+            throw new IllegalArgumentException("자신의 기물만 움직일 수 있습니다.");
+        }
     }
 
     private void commandMove(String src, String dst) throws IllegalArgumentException {

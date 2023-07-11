@@ -48,4 +48,9 @@ public class BlankPiece implements Piece {
     public boolean equalsTypeAndColor(Type type, Color color) {
         return Type.BLANK == type && this.color == color;
     }
+
+    @Override
+    public boolean isMovable(int round) {
+        return color.checkRound(round);
+    }
 }

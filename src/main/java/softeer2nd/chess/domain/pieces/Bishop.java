@@ -1,6 +1,5 @@
 package softeer2nd.chess.domain.pieces;
 
-import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
@@ -51,5 +50,10 @@ public class Bishop implements Piece {
     @Override
     public boolean equalsTypeAndColor(Type type, Color color) {
         return Type.BISHOP == type && this.color == color;
+    }
+
+    @Override
+    public boolean isMovable(int round) {
+        return color.checkRound(round);
     }
 }

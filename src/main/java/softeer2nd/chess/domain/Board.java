@@ -186,4 +186,12 @@ public class Board {
         }
         System.out.println(pointOfTypes);
     }
+
+    public boolean checkMovableByColor(Position position, int round) {
+        Piece target = findPiece(position);
+        if(target.isMovable(round)) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -21,4 +21,5 @@ public interface Piece {
 
     public boolean equalsTypeAndColor(Type type, Color color);
 
+    boolean isMovable(int round);
 }

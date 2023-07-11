@@ -51,4 +51,9 @@ public class Queen implements Piece {
     public boolean equalsTypeAndColor(Type type, Color color) {
         return Type.QUEEN == type && this.color == color;
     }
+
+    @Override
+    public boolean isMovable(int round) {
+        return color.checkRound(round);
+    }
 }

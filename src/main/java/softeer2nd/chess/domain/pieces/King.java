@@ -52,4 +52,9 @@ public class King implements Piece {
     public boolean equalsTypeAndColor(Type type, Color color) {
         return Type.KING == type && this.color == color;
     }
+
+    @Override
+    public boolean isMovable(int round) {
+        return color.checkRound(round);
+    }
 }

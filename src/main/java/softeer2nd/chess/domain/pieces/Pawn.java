@@ -60,4 +60,9 @@ public class Pawn implements Piece {
     public boolean equalsTypeAndColor(Type type, Color color) {
         return Type.PAWN == type && this.color == color;
     }
+
+    @Override
+    public boolean isMovable(int round) {
+        return color.checkRound(round);
+    }
 }
