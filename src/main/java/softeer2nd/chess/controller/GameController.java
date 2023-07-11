@@ -16,7 +16,7 @@ public class GameController {
 
     private final InputView inputView;
     private final OutputView outputView;
-    private Board chessBoard;
+    private final Board chessBoard;
     private final Scanner sc;
 
 
@@ -47,37 +47,38 @@ public class GameController {
         outputView.gameEnd();
     }
 
-    private String inputCommandUntilPossibleToMove(int round){
-        boolean result = true;
+    private String inputCommandUntilPossibleToMove(int round) {
+        boolean enterCorrectly = true;
         String command = "";
-        while(result){
-            result = false;
+        while (enterCorrectly) {
+            enterCorrectly = false;
             inputView.beforeMove(round);
             command = sc.nextLine();
-            if(exit(command)) {
-                break;
-            }
-
-            try{
+            try {
                 isStartWithMove(command);
-            }catch (IllegalAccessException e) {
+            } catch (IllegalArgumentException e) {
                 outputView.print(e.toString());
-                result = true;
+                enterCorrectly = true;
             }
         }
         return command;
     }
 
-    private void isStartWithMove(String command) throws IllegalAccessException {
+    private void isStartWithMove(String command) throws IllegalArgumentException {
         if (command.startsWith(MOVE_COMMAND)) {
             String[] splitCommand = command.split(SPACE);
-            Validation.isOutOfBoard(splitCommand[1]);
-            Validation.isOutOfBoard(splitCommand[2]);
+            validateCommand(splitCommand[1]);
+            validateCommand(splitCommand[2]);
             commandMove(splitCommand[1], splitCommand[2]);
         }
     }
 
-    private void commandMove(String src, String dst) throws IllegalAccessException {
+    private void validateCommand(String command) throws IllegalArgumentException {
+        Validation.isRegularCommand(command);
+        Validation.isOutOfBoard(command);
+    }
+
+    private void commandMove(String src, String dst) throws IllegalArgumentException {
         Position srcPosition = Position.transfer(src);
         Position dstPosition = Position.transfer(dst);
         chessBoard.move(srcPosition, dstPosition);
@@ -87,4 +88,7 @@ public class GameController {
         return command.startsWith(EXIT_COMMAND);
     }
 
+    public void forTest_validateCommand(String cmd) throws IllegalArgumentException {
+        validateCommand(cmd);
+    }
 }
