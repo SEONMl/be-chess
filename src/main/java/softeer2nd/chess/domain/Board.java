@@ -54,14 +54,7 @@ public class Board {
             NOT_A_MOVE_COMMAND();
         }
 
-        int x = src.getRow();
-        int y = src.getCol();
-        int nx = dst.getRow();
-        int ny = dst.getCol();
-        int count = Math.abs(nx - x);
-        if (nx - x == 0) {
-            count = Math.abs(ny - y);
-        }
+        int count = getCount(src, dst);
 
         // 타겟이 이동할 수 잇ㄴ느 방향인지?
         // 가는 길에 다른 기물이 없는지?
@@ -73,8 +66,16 @@ public class Board {
         }
     }
 
-    private boolean isKnightMoving(Direction direction) {
-        return Direction.knightDirection().contains(direction);
+    private static int getCount(Position src, Position dst) {
+        int x = src.getRow();
+        int y = src.getCol();
+        int nx = dst.getRow();
+        int ny = dst.getCol();
+        int count = Math.abs(nx - x);
+        if (nx - x == 0) {
+            count = Math.abs(ny - y);
+        }
+        return count;
     }
 
     private boolean nextStep(int row, int col, Direction direction, int count) {
@@ -96,14 +97,14 @@ public class Board {
         StringBuilder sb = new StringBuilder();
 
         sb.append(IntStream.range(0, MAX_SIZE)
-                        .mapToObj(this::view)
+                        .mapToObj(this::joinRankOf)
                         .collect(Collectors.joining()))
                 .append(NEWLINE)
                 .append(COLUMN_REPRESENTATION);
         return sb.toString();
     }
 
-    private String view(int row) {
+    private String joinRankOf(int row) {
         int offsetRow = MAX_SIZE - row;
         StringBuilder sb = new StringBuilder();
 
