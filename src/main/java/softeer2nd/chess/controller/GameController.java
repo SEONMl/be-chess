@@ -83,7 +83,7 @@ public class GameController {
 
     private void moveOnlyYourPieces(String position, int round) { // 0: 흰, 1: 검
         Position targetPosition = Position.transfer(position);
-        if (!chessBoard.checkMovableByColor(targetPosition, round)) {
+        if (!chessBoard.checkTurnByColor(targetPosition, round)) {
             throw new IllegalArgumentException("자신의 기물만 움직일 수 있습니다.");
         }
     }

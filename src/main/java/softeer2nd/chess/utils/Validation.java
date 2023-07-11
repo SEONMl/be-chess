@@ -14,7 +14,7 @@ public class Validation {
         Matcher matcher = pattern.matcher(command);
 
         if(!matcher.matches()){
-            throw new IllegalArgumentException("이동 명령은 연속된 소문자 하나와 숫자 문자 하나로 표현해주세요");
+            throw new IllegalArgumentException("이동 명령은 연속된 소문자 하나와 숫자 문자 하나로 표현해주세요.");
         }
     }
 

@@ -7,10 +7,12 @@ import softeer2nd.chess.domain.enums.Type;
 public class Pawn implements Piece {
     private final Color color;
     private final Type type;
+    private boolean moved;
 
     Pawn(Color color) {
         this.color = color;
         this.type = Type.PAWN;
+        this.moved = false;
     }
 
     public boolean verifyAttack(Direction direction, int count) {
@@ -24,13 +26,21 @@ public class Pawn implements Piece {
                 && count == 1;
     }
 
+    public void move(){
+        moved = true;
+    }
 
     @Override
-    public boolean verifyMovePosition(Direction direction, int count) {
-        if (color.isBlack()) {
-            return Direction.SOUTH == direction && count == 1;
+    public boolean verifyMovePosition(Direction direction, int hopeCount) {
+        int howManyCanHope = 2;
+        if (this.moved) {
+            howManyCanHope = 1;
         }
-        return Direction.NORTH == direction && count == 1;
+
+        if (color.isBlack()) {
+            return Direction.SOUTH == direction && hopeCount == howManyCanHope;
+        }
+        return Direction.NORTH == direction && hopeCount == howManyCanHope;
     }
 
     @Override
@@ -63,12 +73,12 @@ public class Pawn implements Piece {
     }
 
     @Override
-    public boolean equalsTypeAndColor(Type type, Color color) {
-        return Type.PAWN == type && this.color == color;
+    public boolean equalsTypeAndColor(Type type, Color hopeCount) {
+        return Type.PAWN == type && this.color == hopeCount;
     }
 
     @Override
-    public boolean isMovable(int round) {
-        return color.checkRound(round);
+    public boolean isTurn(int gameRound) {
+        return color.checkRound(gameRound);
     }
 }

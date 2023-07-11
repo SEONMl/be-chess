@@ -4,16 +4,19 @@ import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
+import softeer2nd.chess.domain.pieces.Pawn;
 import softeer2nd.chess.domain.pieces.Piece;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static softeer2nd.chess.utils.StringUtils.NEWLINE;
 import static softeer2nd.chess.utils.StringUtils.SPACE;
 import static softeer2nd.chess.utils.Validation.*;
-import static softeer2nd.chess.utils.Validation.THROW_ALREADY_PIECE_EXIST;
 
 public class Board {
 
@@ -21,18 +24,14 @@ public class Board {
     public static final String COLUMN_REPRESENTATION = "abcdefgh";
     public static final int WHITE_PIECE_LINE = MAX_SIZE;
     public static final int BLACK_PIECE_LINE = 0;
-    private List<Rank> ranks;
+    private final List<Rank> ranks;
 
     public Board() {
-        initialize();
+        ranks = initialize();
     }
 
-    private Board(final List<Rank> ranks) {
-        this.ranks = ranks;
-    }
-
-    public void initialize() {
-        ranks = new ArrayList<>(
+    public List<Rank> initialize() {
+        return new ArrayList<>(
                 Arrays.asList(
                         Rank.createDifferentPieceArray(Color.BLACK),
                         Rank.createPawnArray(Color.BLACK),
@@ -46,6 +45,27 @@ public class Board {
         );
     }
 
+    public void move(Position srcPosition, Position dstPosition) throws IllegalArgumentException {
+        checkMovePossibility(srcPosition, dstPosition);
+        Piece beforeChange = deleteOriginPiece(srcPosition);
+        addPieceAt(dstPosition, beforeChange);
+    }
+
+    private Piece deleteOriginPiece(Position position) {
+        int srcRank = position.getRow();
+        Piece origin = findPiece(position);
+        if (origin.getType() == Type.PAWN) {
+            ((Pawn) origin).move();
+        }
+
+        ranks.get(srcRank).delete(position);
+        return origin;
+    }
+
+    private void addPieceAt(Position position, Piece piece) {
+        int dstRank = position.getRow();
+        ranks.get(dstRank).add(position, piece);
+    }
 
     private void checkMovePossibility(Position srcPosition, Position dstPosition) throws IllegalArgumentException {
         Direction headDirection = srcPosition.getDirection(dstPosition);
@@ -53,64 +73,56 @@ public class Board {
             NOT_A_MOVE_COMMAND();
         }
 
-        int count = getCount(srcPosition, dstPosition);
+        int hopeCount = srcPosition.getHopeCount(dstPosition);
 
-        Piece from = getTargetAt(srcPosition);
-        checkMovable(srcPosition, headDirection, count, from);
+        Piece from = findPiece(srcPosition);
+        checkIsMovable(srcPosition, headDirection, hopeCount, from);
 
-        Piece to = getTargetAt(dstPosition);
+        Piece to = findPiece(dstPosition);
         checkSameColor(from, to);
     }
 
-    private void checkMovable(Position src, Direction direction, int count, Piece from) {
-        if (!from.verifyMovePosition(direction, count)) {
+    public Piece findPiece(Position position) {
+        Rank target = ranks.get(position.getRow());
+        return target.find(position.getColumn());
+    }
+
+    private void checkIsMovable(Position src, Direction direction, int hopeCount, Piece from) {
+        if (!from.verifyMovePosition(direction, hopeCount)) {
             NOT_ALLOW_DIRECTION();
         }
-        if (!notExistPiece(src.getRow(), src.getCol(), direction, count)) {
+        if (existPieceInDirection(src, direction, hopeCount)) {
             THROW_ALREADY_PIECE_EXIST();
         }
     }
 
     private void checkSameColor(Piece piece1, Piece piece2) {
-        if (isSameColor(piece1, piece2)) {
+        if (isSameTeam(piece1, piece2)) {
             THROW_ALREADY_PIECE_EXIST();
         }
     }
 
-    private static boolean isSameColor(Piece from, Piece to) {
+    private static boolean isSameTeam(Piece from, Piece to) {
         return from.isWhite() && to.isWhite() || from.isBlack() && to.isBlack();
     }
 
-    private Piece getTargetAt(Position position) {
-        return ranks.get(position.getRow()).find(position.getCol());
-    }
+    private boolean existPieceInDirection(Position position, Direction direction, int hopeCount) {
+        if (direction.isKnightMove()) return false;
+        if (hopeCount == 0) return false;
+        boolean result = false;
 
-    private static int getCount(Position src, Position dst) {
-        int x = src.getRow();
-        int y = src.getCol();
-        int nx = dst.getRow();
-        int ny = dst.getCol();
-        int count = Math.abs(nx - x);
-        if (nx - x == 0) {
-            count = Math.abs(ny - y);
+        Position nextPosition = direction.getNextPosition(position);
+        if(checkIsNotEmpty(nextPosition)) {
+            return true;
         }
-        return count;
+
+        result &= existPieceInDirection(nextPosition, direction, hopeCount - 1);
+        return !result;
     }
 
-    private boolean notExistPiece(int row, int col, Direction direction, int count) {
-        if (direction.isKnightMove()) return true;
-        if (count == 0) return true;
-        boolean result = true;
-
-        int nextRow = row - direction.getXDegree();
-        int nextCol = col - direction.getYDegree();
-        if (!ranks.get(nextRow).isEmptyPlace(nextCol)) {
-            return false;
-        }
-        result &= notExistPiece(nextRow, nextCol, direction, count - 1);
-        return result;
+    private boolean checkIsNotEmpty(Position position){
+        return findPiece(position).getType() != Type.BLANK;
     }
-
 
     public String show() {
         StringBuilder sb = new StringBuilder();
@@ -136,24 +148,8 @@ public class Board {
         return sb.toString();
     }
 
-    public void move(Position srcPosition, Position dstPosition) throws IllegalArgumentException {
-        checkMovePossibility(srcPosition, dstPosition);
-        Rank target = ranks.get(srcPosition.getRow());
-        // 제거
-        Piece beforeChange = target.delete(srcPosition);
-
-        // 추가
-        Rank nextTarget = ranks.get(dstPosition.getRow());
-        nextTarget.add(dstPosition, beforeChange);
-    }
-
     private String showRank(int row) {
         return ranks.get(row).show();
-    }
-
-    public Piece findPiece(Position position) {
-        Rank target = ranks.get(position.getRow());
-        return target.find(position.getCol());
     }
 
     public double calculatePoint(Color color) {
@@ -163,16 +159,16 @@ public class Board {
 
         // Pawn 만 따로 계산 : 점수 - 개수*0.5
         List<Integer> countOfPawns = countPawnsInRow(color);
-        totalPoint += offsetPointWhenInRow(countOfPawns);
+        totalPoint += getOffsetPointWhenInRow(countOfPawns);
 
         return totalPoint;
     }
 
-    private static double offsetPointWhenInRow(List<Integer> countOfPawns) {
+    private static double getOffsetPointWhenInRow(List<Integer> pawnCountInRow) {
         int offsetPoint = 0;
         for (int col = 0; col < MAX_SIZE; col++) {
-            if (countOfPawns.get(col) > 1) {
-                offsetPoint -= countOfPawns.get(col) * 0.5;
+            if (pawnCountInRow.get(col) > 1) {
+                offsetPoint -= pawnCountInRow.get(col) * 0.5;
             }
         }
         return offsetPoint;
@@ -194,8 +190,8 @@ public class Board {
         return ranks.get(row).find(col).equalsTypeAndColor(Type.PAWN, color);
     }
 
-    public boolean checkMovableByColor(Position position, int round) {
+    public boolean checkTurnByColor(Position position, int round) {
         Piece target = findPiece(position);
-        return target.isMovable(round);
+        return target.isTurn(round);
     }
 }

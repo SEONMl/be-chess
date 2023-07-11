@@ -10,13 +10,12 @@ import softeer2nd.chess.domain.pieces.PieceFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PieceTest {
+class PieceTest {
 
 
     @Test
     @DisplayName("기물과 색깔 별로 인스턴스 생성되는지?")
     void createPiece() {
-
         verifyPiece(PieceFactory.createPawn(Color.WHITE), Type.PAWN, Color.WHITE);
         verifyPiece(PieceFactory.createKing(Color.WHITE), Type.KING, Color.WHITE);
         verifyPiece(PieceFactory.createBishop(Color.WHITE), Type.BISHOP, Color.WHITE);

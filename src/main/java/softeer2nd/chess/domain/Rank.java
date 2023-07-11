@@ -15,7 +15,7 @@ import static softeer2nd.chess.domain.Board.BLACK_PIECE_LINE;
 import static softeer2nd.chess.domain.Board.WHITE_PIECE_LINE;
 
 public class Rank {
-    private List<Piece> pieces;
+    private final List<Piece> pieces;
 
     private Rank(List<Piece> pieces) {
         this.pieces = pieces;
@@ -86,15 +86,12 @@ public class Rank {
                 .count();
     }
 
-    public boolean isEmptyPlace(int col) {
-        return pieces.get(col).getType() == Type.BLANK;
-    }
     public Piece find(int col) {
         return pieces.get(col);
     }
 
     public void add(Position position, Piece piece) {
-        int col = position.getCol();
+        int col = position.getColumn();
         this.pieces.set(col, piece);
     }
 
@@ -106,11 +103,8 @@ public class Rank {
                 .sum();
     }
 
-    public Piece delete(Position position) {
-        int col = position.getCol();
-        Piece beforeChange = find(col);
-        // position 같은 객체..?
+    public void delete(Position position) {
+        int col = position.getColumn();
         this.pieces.set(col, PieceFactory.createBlankPiece());
-        return beforeChange;
     }
 }

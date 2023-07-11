@@ -81,6 +81,7 @@ public class BoardTest {
 
         assertThrows(IllegalArgumentException.class, () -> {
             board.move(source, destination);
+            System.out.println(board.show());
         });
     }
 }

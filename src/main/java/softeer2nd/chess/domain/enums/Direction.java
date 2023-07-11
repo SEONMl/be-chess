@@ -1,5 +1,7 @@
 package softeer2nd.chess.domain.enums;
 
+import softeer2nd.chess.domain.VO.Position;
+
 import java.util.Set;
 
 public enum Direction {
@@ -31,14 +33,6 @@ public enum Direction {
         this.yDegree = yDegree;
     }
 
-    public int getXDegree() {
-        return xDegree;
-    }
-
-    public int getYDegree() {
-        return yDegree;
-    }
-
     public static Direction getDirection(int dRow, int dCol) {
         for (Direction direction : Direction.values()) {
             if (direction.isSame(dRow, dCol)) return direction;
@@ -49,8 +43,10 @@ public enum Direction {
     private boolean isSame(int x, int y) {
         int absX = Math.abs(x);
         int absY = Math.abs(y);
+
         if (x == 0) y /= absY;
         else if (y == 0) x /= absX;
+
         if (absX == absY) {
             x /= absX;
             y /= absY;
@@ -88,5 +84,19 @@ public enum Direction {
 
     public boolean isKnightMove() {
         return knightDirection().contains(this);
+    }
+
+    public Position getNextPosition(Position position) {
+        int row = position.getRow();
+        int col = position.getColumn();
+        return new Position(getNextRow(row), getNextColumn(col));
+    }
+
+    private int getNextRow(int row) {
+        return row - this.xDegree;
+    }
+
+    private int getNextColumn(int column) {
+        return column - this.yDegree;
     }
 }

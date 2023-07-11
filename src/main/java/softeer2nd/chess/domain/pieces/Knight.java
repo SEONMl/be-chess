@@ -48,12 +48,12 @@ public class Knight implements Piece {
     }
 
     @Override
-    public boolean equalsTypeAndColor(Type type, Color color) {
-        return Type.KNIGHT == type && this.color == color;
+    public boolean equalsTypeAndColor(Type type, Color hopeCount) {
+        return Type.KNIGHT == type && this.color == hopeCount;
     }
 
     @Override
-    public boolean isMovable(int round) {
-        return color.checkRound(round);
+    public boolean isTurn(int gameRound) {
+        return color.checkRound(gameRound);
     }
 }

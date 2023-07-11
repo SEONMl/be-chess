@@ -5,11 +5,11 @@ import softeer2nd.chess.domain.enums.Direction;
 
 public class Position {
     private int row;
-    private int col;
+    private int column;
 
-    public Position(int row, int col) {
+    public Position(int row, int column) {
         this.row = row;
-        this.col = col;
+        this.column = column;
     }
 
     public static Position transfer(String expression) {
@@ -20,15 +20,22 @@ public class Position {
 
     public Direction getDirection(Position nextPosition) {
         int dRow = this.row - nextPosition.getRow();
-        int dCol = this.col - nextPosition.getCol();
+        int dCol = this.column - nextPosition.getColumn();
         return Direction.getDirection(dRow, dCol);
+    }
+
+    // 두 끝 점이 일직선에 위치할 때 사용한다.
+    public int getHopeCount(Position position) {
+        int nRow = position.getRow();
+        int nColumn = position.getColumn();
+        return (nRow - this.column == 0)? Math.abs(nRow - this.row) : Math.abs(nColumn - this.column);
     }
 
     public int getRow() {
         return row;
     }
 
-    public int getCol(){
-        return col;
+    public int getColumn(){
+        return column;
     }
 }
