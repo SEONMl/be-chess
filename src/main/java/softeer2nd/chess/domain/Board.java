@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 import static softeer2nd.chess.utils.StringUtils.NEWLINE;
 import static softeer2nd.chess.utils.StringUtils.SPACE;
 import static softeer2nd.chess.utils.Validation.*;
+import static softeer2nd.chess.utils.Validation.THROW_ALREADY_PIECE_EXIST;
 
 public class Board {
 
@@ -47,8 +48,6 @@ public class Board {
 
 
     private void checkMovePossibility(Position src, Position dst) throws IllegalArgumentException {
-        Piece target = ranks.get(src.getRow()).find(src.getCol());
-        // Direction, count로 변환
         Direction direction = src.getDirection(dst);
         if (direction.isNone()) {
             NOT_A_MOVE_COMMAND();
@@ -56,12 +55,26 @@ public class Board {
 
         int count = getCount(src, dst);
 
-        if (!target.verifyMovePosition(direction, count)) {
+        Piece from = getTargetAt(src);
+        if (!from.verifyMovePosition(direction, count)) {
             NOT_ALLOW_DIRECTION();
         }
         if (!notExistPiece(src.getRow(), src.getCol(), direction, count)) {
             THROW_ALREADY_PIECE_EXIST();
         }
+
+        Piece to = getTargetAt(dst);
+        if(isSameColor(from, to)){
+            THROW_ALREADY_PIECE_EXIST();
+        }
+    }
+
+    private static boolean isSameColor(Piece from, Piece to) {
+        return from.isWhite() && to.isWhite() || from.isBlack() && to.isBlack();
+    }
+
+    private Piece getTargetAt(Position position) {
+        return ranks.get(position.getRow()).find(position.getCol());
     }
 
     private static int getCount(Position src, Position dst) {
