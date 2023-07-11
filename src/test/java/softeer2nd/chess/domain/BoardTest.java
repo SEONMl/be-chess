@@ -41,7 +41,6 @@ public class BoardTest {
         assertEquals(38.0, board.calculatePoint(Color.WHITE), 0.01);
 
         System.out.println(board.show());
-        board.sortScore(Color.BLACK);
     }
 
 

@@ -47,24 +47,32 @@ public class Board {
     }
 
 
-    private void checkMovePossibility(Position src, Position dst) throws IllegalArgumentException {
-        Direction direction = src.getDirection(dst);
-        if (direction.isNone()) {
+    private void checkMovePossibility(Position srcPosition, Position dstPosition) throws IllegalArgumentException {
+        Direction headDirection = srcPosition.getDirection(dstPosition);
+        if (headDirection.isNone()) {
             NOT_A_MOVE_COMMAND();
         }
 
-        int count = getCount(src, dst);
+        int count = getCount(srcPosition, dstPosition);
 
-        Piece from = getTargetAt(src);
+        Piece from = getTargetAt(srcPosition);
+        checkMovable(srcPosition, headDirection, count, from);
+
+        Piece to = getTargetAt(dstPosition);
+        checkSameColor(from, to);
+    }
+
+    private void checkMovable(Position src, Direction direction, int count, Piece from) {
         if (!from.verifyMovePosition(direction, count)) {
             NOT_ALLOW_DIRECTION();
         }
         if (!notExistPiece(src.getRow(), src.getCol(), direction, count)) {
             THROW_ALREADY_PIECE_EXIST();
         }
+    }
 
-        Piece to = getTargetAt(dst);
-        if(isSameColor(from, to)){
+    private void checkSameColor(Piece piece1, Piece piece2) {
+        if (isSameColor(piece1, piece2)) {
             THROW_ALREADY_PIECE_EXIST();
         }
     }
@@ -186,25 +194,8 @@ public class Board {
         return ranks.get(row).find(col).equalsTypeAndColor(Type.PAWN, color);
     }
 
-    public void sortScore(Color color) {
-        SortedMap<Type, Double> pointOfTypes = new TreeMap<>();
-
-        for (int row = 0; row < MAX_SIZE; row++) {
-            for (int col = 0; col < MAX_SIZE; col++) {
-                Piece target = ranks.get(row).find(col);
-                pointOfTypes.put(target.getType(),
-                        pointOfTypes.getOrDefault(target.getType(), 0D)
-                                + target.getType().getPoint());
-            }
-        }
-        System.out.println(pointOfTypes);
-    }
-
     public boolean checkMovableByColor(Position position, int round) {
         Piece target = findPiece(position);
-        if(target.isMovable(round)) {
-            return true;
-        }
-        return false;
+        return target.isMovable(round);
     }
 }
