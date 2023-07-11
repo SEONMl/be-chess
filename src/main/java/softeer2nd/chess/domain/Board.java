@@ -46,7 +46,7 @@ public class Board {
     }
 
 
-    public void possibleToMove(Position src, Position dst) throws IllegalAccessException {
+    private void checkMovePossibility(Position src, Position dst) throws IllegalArgumentException {
         Piece target = ranks.get(src.getRow()).find(src.getCol());
         // Direction, count로 변환
         Direction direction = src.getDirection(dst);
@@ -56,12 +56,10 @@ public class Board {
 
         int count = getCount(src, dst);
 
-        // 타겟이 이동할 수 잇ㄴ느 방향인지?
-        // 가는 길에 다른 기물이 없는지?
         if (!target.verifyMovePosition(direction, count)) {
             NOT_ALLOW_DIRECTION();
         }
-        if (!nextStep(src.getRow(), src.getCol(), direction, count)) {
+        if (!notExistPiece(src.getRow(), src.getCol(), direction, count)) {
             THROW_ALREADY_PIECE_EXIST();
         }
     }
@@ -78,8 +76,8 @@ public class Board {
         return count;
     }
 
-    private boolean nextStep(int row, int col, Direction direction, int count) {
-        if(direction.isKnightMove()) return true;
+    private boolean notExistPiece(int row, int col, Direction direction, int count) {
+        if (direction.isKnightMove()) return true;
         if (count == 0) return true;
         boolean result = true;
 
@@ -88,7 +86,7 @@ public class Board {
         if (!ranks.get(nextRow).isEmptyPlace(nextCol)) {
             return false;
         }
-        result &= nextStep(nextRow, nextCol, direction, count - 1);
+        result &= notExistPiece(nextRow, nextCol, direction, count - 1);
         return result;
     }
 
@@ -117,7 +115,8 @@ public class Board {
         return sb.toString();
     }
 
-    public void move(Position srcPosition, Position dstPosition) {
+    public void move(Position srcPosition, Position dstPosition) throws IllegalArgumentException {
+        checkMovePossibility(srcPosition, dstPosition);
         Rank target = ranks.get(srcPosition.getRow());
         // 제거
         Piece beforeChange = target.delete(srcPosition);

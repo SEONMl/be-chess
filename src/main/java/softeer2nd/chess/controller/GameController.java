@@ -80,7 +80,6 @@ public class GameController {
     private void commandMove(String src, String dst) throws IllegalAccessException {
         Position srcPosition = Position.transfer(src);
         Position dstPosition = Position.transfer(dst);
-        chessBoard.possibleToMove(srcPosition, dstPosition);
         chessBoard.move(srcPosition, dstPosition);
     }
 
