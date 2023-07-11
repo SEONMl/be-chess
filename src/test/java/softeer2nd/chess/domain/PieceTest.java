@@ -3,6 +3,7 @@ package softeer2nd.chess.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
 import softeer2nd.chess.domain.pieces.Piece;
 import softeer2nd.chess.domain.pieces.PieceFactory;
@@ -43,5 +44,29 @@ public class PieceTest {
         assertFalse(blank.isBlack());
         assertFalse(blank.isWhite());
         assertEquals(Type.BLANK, blank.getType());
+    }
+
+    @Test
+    @DisplayName("비숍은 대각선으로만 이동할 수 있다.")
+    void bishopMustMoveDiagonally() {
+        Piece bishop = PieceFactory.createBishop(Color.WHITE);
+
+        Direction headingNorth = Direction.NORTH;
+        Direction headingNorthWest = Direction.NORTHWEST;
+
+        assertFalse(bishop.verifyMovePosition(headingNorth, 1));
+        assertTrue(bishop.verifyMovePosition(headingNorthWest, 1));
+    }
+
+    @Test
+    @DisplayName("킹은 모든 방향으로 한 칸 씩 움직여야 한다.")
+    void kingMustMoveOneCount() {
+        Piece king = PieceFactory.createKing(Color.WHITE);
+
+        Direction headingNorth = Direction.NORTH;
+        Direction headingNorthWest = Direction.NORTHWEST;
+
+        assertFalse(king.verifyMovePosition(headingNorth, 3));
+        assertTrue(king.verifyMovePosition(headingNorthWest, 1));
     }
 }

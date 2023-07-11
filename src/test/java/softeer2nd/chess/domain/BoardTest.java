@@ -7,7 +7,8 @@ import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.domain.pieces.PieceFactory;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
@@ -21,20 +22,19 @@ public class BoardTest {
     @Test
     @DisplayName("보드 위에서 기물 찾기")
     void findPiece() throws Exception {
-        board.initialize();
+        Position expectWhiteRook = Position.transfer("a1");
+        Position expectBlackRook = Position.transfer("a8");
 
-        Position expectWhiteRook = Position.transfer("a8");
-        Position expectBlackRook = Position.transfer("a1");
-
-        assertEquals(PieceFactory.createRook(Color.WHITE), board.findPiece(expectWhiteRook));
-        assertEquals(PieceFactory.createRook(Color.BLACK), board.findPiece(expectBlackRook));
+        assertThat(board.findPiece(expectWhiteRook))
+                .isEqualToComparingFieldByFieldRecursively(PieceFactory.createRook(Color.WHITE));
+        assertThat(board.findPiece(expectBlackRook))
+                .isEqualToComparingFieldByFieldRecursively(PieceFactory.createRook(Color.BLACK));
     }
 
 
     @Test
     @DisplayName("체스판의 기물 점수 구하는가?")
     void calculatePoint() throws Exception {
-        board.initialize();
         double calculated = board.calculatePoint(Color.BLACK);
 
         assertEquals(38.0, calculated, 0.01);
@@ -57,9 +57,31 @@ public class BoardTest {
 
         board.move(srcPosition, dstPosition);
 
-        assertEquals(PieceFactory.createBlankPiece(),
-                board.findPiece(srcPosition));
-        assertEquals(PieceFactory.createKnight(Color.WHITE),
-                board.findPiece(dstPosition));
+        assertThat(board.findPiece(srcPosition))
+                .isEqualToComparingFieldByFieldRecursively(PieceFactory.createBlankPiece());
+        assertThat(board.findPiece(dstPosition))
+                .isEqualToComparingFieldByFieldRecursively(PieceFactory.createKnight(Color.WHITE));
+    }
+
+    @Test
+    @DisplayName("나이트는 기물을 뛰어 넘어 이동할 수 있다.")
+    void knightCanMoveOverPiece() {
+        Position source = Position.transfer("b1");
+        Position destination = Position.transfer("c3");
+
+        assertAll(() -> {
+            board.move(source, destination);
+        });
+    }
+
+    @Test
+    @DisplayName("이동 경로에 기물이 있으면 이동할 수 없다.")
+    void canNotMoveIfPieceExist() {
+        Position source = Position.transfer("d1");
+        Position destination = Position.transfer("a4");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            board.move(source, destination);
+        });
     }
 }
