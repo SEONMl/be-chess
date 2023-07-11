@@ -6,6 +6,7 @@ public enum Color {
     NONE(-1),
     ;
     private final int round;
+    public static final int COLOR_COUNT = 2;
 
     Color(int round) {
         this.round = round;

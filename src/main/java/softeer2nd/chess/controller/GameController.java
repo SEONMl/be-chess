@@ -2,6 +2,7 @@ package softeer2nd.chess.controller;
 
 import softeer2nd.chess.domain.Board;
 import softeer2nd.chess.domain.VO.Position;
+import softeer2nd.chess.domain.enums.Color;
 import softeer2nd.chess.utils.Validation;
 import softeer2nd.chess.view.InputView;
 import softeer2nd.chess.view.OutputView;
@@ -55,7 +56,7 @@ public class GameController {
             inputView.beforeMove(round);
             command = sc.nextLine();
             try {
-                isStartWithMove(command, round);
+                isStartWithMove(command, round % Color.COLOR_COUNT);
             } catch (IllegalArgumentException e) {
                 outputView.print(e.toString());
                 enterCorrectly = true;
@@ -75,13 +76,13 @@ public class GameController {
         }
     }
 
-    private void validateCommand(String command) throws IllegalArgumentException {
-        Validation.isRegularCommand(command);
-        Validation.isOutOfBoard(command);
+    private void validateCommand(String position) throws IllegalArgumentException {
+        Validation.isRegularCommand(position);
+        Validation.isOutOfBoard(position);
     }
 
-    private void moveOnlyYourPieces(String command, int round) { // 0: 흰, 1: 검
-        Position targetPosition = Position.transfer(command);
+    private void moveOnlyYourPieces(String position, int round) { // 0: 흰, 1: 검
+        Position targetPosition = Position.transfer(position);
         if (!chessBoard.checkMovableByColor(targetPosition, round)) {
             throw new IllegalArgumentException("자신의 기물만 움직일 수 있습니다.");
         }
@@ -95,6 +96,10 @@ public class GameController {
 
     private boolean exit(String command) {
         return command.startsWith(EXIT_COMMAND);
+    }
+
+    public void forTest_moveOnlyYourPieces(String cmd, int round) throws IllegalArgumentException {
+        moveOnlyYourPieces(cmd, round);
     }
 
     public void forTest_validateCommand(String cmd) throws IllegalArgumentException {

@@ -1,5 +1,7 @@
 package softeer2nd.chess.view;
 
+import softeer2nd.chess.domain.enums.Color;
+
 public class InputView {
 
     public void gameStart() {
@@ -8,7 +10,7 @@ public class InputView {
     }
 
     public void beforeMove(int round) {
-        print(round % 2 + 1 + "님 입력 >>> ");
+        print(round % Color.COLOR_COUNT + 1 + "님 입력 >>> ");
     }
 
     private void print(String content){

@@ -2,6 +2,7 @@ package softeer2nd.chess.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import softeer2nd.chess.domain.Board;
@@ -24,6 +25,14 @@ class GameControllerTest {
     void commandMustInChessBoardSize(String command) {
         assertThrows(IllegalArgumentException.class, () -> {
             controller.forTest_validateCommand(command);
+        });
+    }
+
+    @Test
+    @DisplayName("자신의 기물만 움직일 수 있다.")
+    void piecesCanMoveByRound() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            controller.forTest_moveOnlyYourPieces("a2", 1);
         });
     }
 }
