@@ -6,6 +6,9 @@ import softeer2nd.chess.domain.enums.Direction;
 import softeer2nd.chess.domain.enums.Type;
 import softeer2nd.chess.domain.pieces.Pawn;
 import softeer2nd.chess.domain.pieces.Piece;
+import softeer2nd.chess.exception.AlreadyPieceExistException;
+import softeer2nd.chess.exception.NotAllowDirectionException;
+import softeer2nd.chess.exception.NotMoveCommandException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +48,7 @@ public class Board {
         );
     }
 
-    public void move(Position srcPosition, Position dstPosition) throws IllegalArgumentException {
+    public void move(Position srcPosition, Position dstPosition) throws Exception {
         checkMovePossibility(srcPosition, dstPosition);
         Piece beforeChange = deleteOriginPiece(srcPosition);
         addPieceAt(dstPosition, beforeChange);
@@ -67,10 +70,10 @@ public class Board {
         ranks.get(dstRank).add(position, piece);
     }
 
-    private void checkMovePossibility(Position srcPosition, Position dstPosition) throws IllegalArgumentException {
+    private void checkMovePossibility(Position srcPosition, Position dstPosition) throws Exception {
         Direction headDirection = srcPosition.getDirection(dstPosition);
         if (headDirection.isNone()) {
-            NOT_A_MOVE_COMMAND();
+            throw new NotAllowDirectionException();
         }
 
         int hopeCount = srcPosition.getHopeCount(dstPosition);
@@ -87,18 +90,18 @@ public class Board {
         return target.find(position.getColumn());
     }
 
-    private void checkIsMovable(Position src, Direction direction, int hopeCount, Piece from) {
+    private void checkIsMovable(Position src, Direction direction, int hopeCount, Piece from) throws Exception {
         if (!from.verifyMovePosition(direction, hopeCount)) {
-            NOT_ALLOW_DIRECTION();
+            throw new NotMoveCommandException();
         }
         if (existPieceInDirection(src, direction, hopeCount)) {
-            THROW_ALREADY_PIECE_EXIST();
+            throw new AlreadyPieceExistException();
         }
     }
 
-    private void checkSameColor(Piece piece1, Piece piece2) {
+    private void checkSameColor(Piece piece1, Piece piece2) throws Exception {
         if (isSameTeam(piece1, piece2)) {
-            THROW_ALREADY_PIECE_EXIST();
+            throw new AlreadyPieceExistException();
         }
     }
 

@@ -65,7 +65,7 @@ public class GameController {
         return command;
     }
 
-    private void isStartWithMove(String command, int round) throws IllegalArgumentException {
+    private void isStartWithMove(String command, int round) throws Exception {
         if (command.startsWith(MOVE_COMMAND)) {
             String[] splitCommand = command.split(SPACE);
             validateCommand(splitCommand[1]);
@@ -76,7 +76,7 @@ public class GameController {
         }
     }
 
-    private void validateCommand(String position) throws IllegalArgumentException {
+    private void validateCommand(String position) throws Exception {
         Validation.isRegularCommand(position);
         Validation.isOutOfBoard(position);
     }
@@ -88,7 +88,7 @@ public class GameController {
         }
     }
 
-    private void commandMove(String src, String dst) throws IllegalArgumentException {
+    private void commandMove(String src, String dst) throws Exception {
         Position srcPosition = Position.transfer(src);
         Position dstPosition = Position.transfer(dst);
         chessBoard.move(srcPosition, dstPosition);
@@ -98,11 +98,4 @@ public class GameController {
         return command.startsWith(EXIT_COMMAND);
     }
 
-    public void forTest_moveOnlyYourPieces(String cmd, int round) throws IllegalArgumentException {
-        moveOnlyYourPieces(cmd, round);
-    }
-
-    public void forTest_validateCommand(String cmd) throws IllegalArgumentException {
-        validateCommand(cmd);
-    }
 }
