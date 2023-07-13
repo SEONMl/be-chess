@@ -48,10 +48,11 @@ public class Board {
         );
     }
 
-    public void move(Position srcPosition, Position dstPosition) throws Exception {
-        checkMovePossibility(srcPosition, dstPosition);
+    public boolean move(Position srcPosition, Position dstPosition) throws Exception {
+        Piece piece = checkMovePossibility(srcPosition, dstPosition);
         Piece beforeChange = deleteOriginPiece(srcPosition);
         addPieceAt(dstPosition, beforeChange);
+        return piece.getType() == Type.KING;
     }
 
     private Piece deleteOriginPiece(Position position) {
@@ -70,7 +71,7 @@ public class Board {
         ranks.get(dstRank).add(position, piece);
     }
 
-    private void checkMovePossibility(Position srcPosition, Position dstPosition) throws Exception {
+    private Piece checkMovePossibility(Position srcPosition, Position dstPosition) throws Exception {
         Direction headDirection = srcPosition.getDirection(dstPosition);
         if (headDirection.isNone()) {
             throw new NotMoveCommandException();
@@ -86,6 +87,8 @@ public class Board {
             checkSameColor(from, to);
             checkPawnAttack(from, headDirection);
         }
+
+        return to;
     }
 
     private void checkPawnAttack(Piece from, Direction direction) throws PawnAttackException {

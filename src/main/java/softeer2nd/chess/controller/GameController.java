@@ -3,6 +3,7 @@ package softeer2nd.chess.controller;
 import softeer2nd.chess.domain.Board;
 import softeer2nd.chess.domain.VO.Position;
 import softeer2nd.chess.domain.enums.Color;
+import softeer2nd.chess.domain.enums.State;
 import softeer2nd.chess.utils.Validation;
 import softeer2nd.chess.view.InputView;
 import softeer2nd.chess.view.OutputView;
@@ -19,6 +20,7 @@ public class GameController {
     private final OutputView outputView;
     private final Board chessBoard;
     private final Scanner sc;
+    private State gameState;
 
 
     public GameController(Board newBoard) {
@@ -26,6 +28,7 @@ public class GameController {
         this.inputView = new InputView();
         this.outputView = new OutputView();
         this.sc = new Scanner(System.in);
+        gameState = State.START;
     }
 
     public void start() {
@@ -37,15 +40,14 @@ public class GameController {
 
     void run() {
         int round = 0;
-        while (true) {
-            String command = inputCommandUntilPossibleToMove(round);
+        while (!gameState.isEnd()) {
+            String command = inputCommandUntilPossibleToMove(round++);
             if (exit(command)) {
                 break;
             }
             outputView.afterMove(chessBoard.show());
-            round++;
         }
-        outputView.gameEnd();
+        outputView.gameEnd(round);
     }
 
     private String inputCommandUntilPossibleToMove(int round) {
@@ -91,7 +93,10 @@ public class GameController {
     private void commandMove(String src, String dst) throws Exception {
         Position srcPosition = Position.transfer(src);
         Position dstPosition = Position.transfer(dst);
-        chessBoard.move(srcPosition, dstPosition);
+        boolean kingDied = chessBoard.move(srcPosition, dstPosition);
+        if(kingDied){
+            this.gameState = State.END;
+        }
     }
 
     private boolean exit(String command) {
