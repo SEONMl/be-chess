@@ -13,6 +13,8 @@ import java.util.Scanner;
 import static softeer2nd.chess.utils.StringUtils.SPACE;
 
 public class GameController {
+    public static final int FROM_POSITION_INDEX = 1;
+    public static final int TO_POSITION_INDEX = 2;
     private final String MOVE_COMMAND = "move";
     private final String EXIT_COMMAND = "exit";
 
@@ -60,7 +62,7 @@ public class GameController {
             try {
                 isStartWithMove(command, round % Color.COLOR_COUNT);
             } catch (Exception e) {
-                outputView.print(e.toString());
+                outputView.print(e.getMessage());
                 enterCorrectly = true;
             }
         }
@@ -70,11 +72,14 @@ public class GameController {
     private void isStartWithMove(String command, int round) throws Exception {
         if (command.startsWith(MOVE_COMMAND)) {
             String[] splitCommand = command.split(SPACE);
-            validateCommand(splitCommand[1]);
-            moveOnlyYourPieces(splitCommand[1], round);
+            String fromPosition = splitCommand[FROM_POSITION_INDEX];
+            String toPosition = splitCommand[TO_POSITION_INDEX];
 
-            validateCommand(splitCommand[2]);
-            commandMove(splitCommand[1], splitCommand[2]);
+            validateCommand(fromPosition);
+            moveOnlyYourPieces(fromPosition, round);
+
+            validateCommand(toPosition);
+            commandMove(fromPosition, toPosition);
         }
     }
 
