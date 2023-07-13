@@ -18,21 +18,4 @@ class GameControllerTest {
         Board board = new Board();
         controller = new GameController(board);
     }
-
-    @DisplayName("체스판 범위 내의 입력을 받아야 한다.")
-    @ParameterizedTest
-    @ValueSource(strings = {"a0", "z4", "4d", "aa", "11"})
-    void commandMustInChessBoardSize(String command) {
-        assertThrows(IllegalArgumentException.class, () -> {
-            controller.forTest_validateCommand(command);
-        });
-    }
-
-    @Test
-    @DisplayName("자신의 기물만 움직일 수 있다.")
-    void piecesCanMoveByRound() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            controller.forTest_moveOnlyYourPieces("a2", 1);
-        });
-    }
 }

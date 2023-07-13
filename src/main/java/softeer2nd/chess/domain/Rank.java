@@ -11,9 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static softeer2nd.chess.domain.Board.BLACK_PIECE_LINE;
-import static softeer2nd.chess.domain.Board.WHITE_PIECE_LINE;
-
 public class Rank {
     private final List<Piece> pieces;
 
@@ -26,10 +23,6 @@ public class Rank {
     }
 
     public static Rank createPawnArray(Color color) {
-        int row = WHITE_PIECE_LINE + 1;
-        if (color.isBlack()) {
-            row = BLACK_PIECE_LINE - 1;
-        }
         return new Rank(createSamePiecesArray(Type.PAWN, color));
     }
 
@@ -38,11 +31,6 @@ public class Rank {
     }
 
     public static Rank createDifferentPieceArray(Color color) {
-        int row = WHITE_PIECE_LINE;
-        if (color.isBlack()) {
-            row = BLACK_PIECE_LINE;
-        }
-
         List<Piece> result = Arrays.asList( //gg
                 PieceFactory.createRook(color),
                 PieceFactory.createKnight(color),
@@ -67,7 +55,7 @@ public class Rank {
     }
 
     private static Piece pieceOf(Type type, Color color) {
-        if(type == Type.PAWN) {
+        if (type == Type.PAWN) {
             return PieceFactory.createPawn(color);
         }
         return PieceFactory.createBlankPiece();
