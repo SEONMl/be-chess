@@ -99,4 +99,8 @@ public enum Direction {
     private int getNextColumn(int column) {
         return column - this.yDegree;
     }
+
+    public boolean isStraight() {
+        return this == NORTH || this == SOUTH;
+    }
 }

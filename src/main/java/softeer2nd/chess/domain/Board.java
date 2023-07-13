@@ -9,6 +9,7 @@ import softeer2nd.chess.domain.pieces.Piece;
 import softeer2nd.chess.exception.AlreadyPieceExistException;
 import softeer2nd.chess.exception.NotAllowDirectionException;
 import softeer2nd.chess.exception.NotMoveCommandException;
+import softeer2nd.chess.exception.PawnAttackException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,6 @@ import java.util.stream.IntStream;
 
 import static softeer2nd.chess.utils.StringUtils.NEWLINE;
 import static softeer2nd.chess.utils.StringUtils.SPACE;
-import static softeer2nd.chess.utils.Validation.*;
 
 public class Board {
 
@@ -73,7 +73,7 @@ public class Board {
     private void checkMovePossibility(Position srcPosition, Position dstPosition) throws Exception {
         Direction headDirection = srcPosition.getDirection(dstPosition);
         if (headDirection.isNone()) {
-            throw new NotAllowDirectionException();
+            throw new NotMoveCommandException();
         }
 
         int hopeCount = srcPosition.getHopeCount(dstPosition);
@@ -82,7 +82,19 @@ public class Board {
         checkIsMovable(srcPosition, headDirection, hopeCount, from);
 
         Piece to = findPiece(dstPosition);
-        checkSameColor(from, to);
+        if(to.getType() != Type.BLANK){
+            checkSameColor(from, to);
+            checkPawnAttack(from, headDirection);
+        }
+    }
+
+    private void checkPawnAttack(Piece from, Direction direction) throws PawnAttackException {
+        if (from.getType() != Type.PAWN) return;
+
+        if (direction.isStraight()) {
+            throw new PawnAttackException();
+        }
+
     }
 
     public Piece findPiece(Position position) {
@@ -92,9 +104,9 @@ public class Board {
 
     private void checkIsMovable(Position src, Direction direction, int hopeCount, Piece from) throws Exception {
         if (!from.verifyMovePosition(direction, hopeCount)) {
-            throw new NotMoveCommandException();
+            throw new NotAllowDirectionException();
         }
-        if (existPieceInDirection(src, direction, hopeCount)) {
+        if (!notExistPieceInDirection(src, direction, hopeCount)) {
             throw new AlreadyPieceExistException();
         }
     }
@@ -109,21 +121,21 @@ public class Board {
         return from.isWhite() && to.isWhite() || from.isBlack() && to.isBlack();
     }
 
-    private boolean existPieceInDirection(Position position, Direction direction, int hopeCount) {
-        if (direction.isKnightMove()) return false;
-        if (hopeCount == 0) return false;
-        boolean result = false;
+    private boolean notExistPieceInDirection(Position position, Direction direction, int hopeCount) {
+        if (direction.isKnightMove()) return true;
+        if (hopeCount == 0) return true;
+        boolean result = true;
 
         Position nextPosition = direction.getNextPosition(position);
-        if(checkIsNotEmpty(nextPosition)) {
-            return true;
+        if (hopeCount > 1 && checkIsNotEmpty(nextPosition)) {
+            return false;
         }
 
-        result &= existPieceInDirection(nextPosition, direction, hopeCount - 1);
-        return !result;
+        result &= notExistPieceInDirection(nextPosition, direction, hopeCount - 1);
+        return result;
     }
 
-    private boolean checkIsNotEmpty(Position position){
+    private boolean checkIsNotEmpty(Position position) {
         return findPiece(position).getType() != Type.BLANK;
     }
 

@@ -57,7 +57,7 @@ public class GameController {
             command = sc.nextLine();
             try {
                 isStartWithMove(command, round % Color.COLOR_COUNT);
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 outputView.print(e.toString());
                 enterCorrectly = true;
             }

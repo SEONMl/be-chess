@@ -38,9 +38,9 @@ public class Pawn implements Piece {
         }
 
         if (color.isBlack()) {
-            return Direction.SOUTH == direction && hopeCount == howManyCanHope;
+            return Direction.blackPawnDirection().contains(direction) && hopeCount <= howManyCanHope;
         }
-        return Direction.NORTH == direction && hopeCount == howManyCanHope;
+        return Direction.whitePawnDirection().contains(direction) && hopeCount <= howManyCanHope;
     }
 
     @Override
